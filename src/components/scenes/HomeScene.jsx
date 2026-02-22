@@ -1,10 +1,10 @@
-import { useRef, useMemo } from "react"
+import { useRef, useMemo, useEffect } from "react"
 import { useFrame } from "@react-three/fiber"
 import { Text, Stars } from "@react-three/drei"
 import { personalInfo } from "../../constants/data"
 import * as THREE from "three"
+import { gsap } from "gsap"
 
-// circular texture so particles look like round stars
 function createCircleTexture() {
   const canvas = document.createElement("canvas")
   canvas.width = 64
@@ -26,10 +26,11 @@ export default function HomeScene() {
   const ringRef = useRef()
   const particlesRef = useRef()
   const ring2Ref = useRef()
+  const coreRef = useRef()
+  const sceneRef = useRef()
 
   const circleTexture = useMemo(() => createCircleTexture(), [])
 
-  // galaxy particles — reduced count, pushed further out
   const particles = useMemo(() => {
     const count = 400
     const positions = new Float32Array(count * 3)
@@ -37,8 +38,8 @@ export default function HomeScene() {
 
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2
-      const radius = 3 + Math.random() * 8  // pushed further from center
-      const spread = (Math.random() - 0.5) * 5
+      const radius = 4 + Math.random() * 8
+      const spread = (Math.random() - 0.5) * 8
 
       positions[i * 3] = Math.cos(angle) * radius
       positions[i * 3 + 1] = spread
@@ -52,18 +53,40 @@ export default function HomeScene() {
     return { positions, colors }
   }, [])
 
-  // floating orbs — reduced and pushed back
   const orbs = useMemo(() => {
     const count = 40
     const positions = new Float32Array(count * 3)
-
     for (let i = 0; i < count; i++) {
       positions[i * 3] = (Math.random() - 0.5) * 14
       positions[i * 3 + 1] = (Math.random() - 0.5) * 14
-      positions[i * 3 + 2] = -2 + (Math.random() - 0.5) * 3  // pushed behind
+      positions[i * 3 + 2] = -2 + (Math.random() - 0.5) * 3
     }
-
     return positions
+  }, [])
+
+  // intro animation on mount
+  useEffect(() => {
+    if (!sceneRef.current) return
+
+    // start everything at scale 0
+    sceneRef.current.scale.set(0, 0, 0)
+    groupRef.current.scale.set(0, 0, 0)
+
+    // expand the whole scene outward
+    gsap.to(sceneRef.current.scale, {
+      x: 1, y: 1, z: 1,
+      duration: 1.2,
+      ease: "elastic.out(1, 0.6)",
+      delay: 0.1
+    })
+
+    // text fades in slightly after
+    gsap.to(groupRef.current.scale, {
+      x: 1, y: 1, z: 1,
+      duration: 1,
+      ease: "elastic.out(1, 0.5)",
+      delay: 0.4
+    })
   }, [])
 
   useFrame(({ clock }) => {
@@ -103,85 +126,90 @@ export default function HomeScene() {
         speed={0.5}
       />
 
-      {/* Galaxy particles — round stars */}
-      <points ref={particlesRef}>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            args={[particles.positions, 3]}
+      {/* Everything that expands on intro */}
+      <group ref={sceneRef}>
+
+        {/* Galaxy particles */}
+        <points ref={particlesRef}>
+          <bufferGeometry>
+            <bufferAttribute
+              attach="attributes-position"
+              args={[particles.positions, 3]}
+            />
+            <bufferAttribute
+              attach="attributes-color"
+              args={[particles.colors, 3]}
+            />
+          </bufferGeometry>
+          <pointsMaterial
+            size={0.06}
+            vertexColors
+            transparent
+            opacity={0.25}
+            sizeAttenuation
+            alphaMap={circleTexture}
+            alphaTest={0.01}
+            depthWrite={false}
           />
-          <bufferAttribute
-            attach="attributes-color"
-            args={[particles.colors, 3]}
+        </points>
+
+        {/* Ambient orbs */}
+        <points>
+          <bufferGeometry>
+            <bufferAttribute
+              attach="attributes-position"
+              args={[orbs, 3]}
+            />
+          </bufferGeometry>
+          <pointsMaterial
+            size={0.05}
+            color="#00ffff"
+            transparent
+            opacity={0.12}
+            sizeAttenuation
+            alphaMap={circleTexture}
+            alphaTest={0.01}
+            depthWrite={false}
           />
-        </bufferGeometry>
-        <pointsMaterial
-          size={0.06}
-          vertexColors
-          transparent
-          opacity={0.5}
-          sizeAttenuation
-          alphaMap={circleTexture}
-          alphaTest={0.01}
-          depthWrite={false}
-        />
-      </points>
+        </points>
 
-      {/* Ambient orbs — round */}
-      <points>
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            args={[orbs, 3]}
+        {/* Inner ring */}
+        <mesh ref={ringRef}>
+          <torusGeometry args={[1.4, 0.006, 16, 120]} />
+          <meshStandardMaterial
+            color="#00ffff"
+            emissive="#00ffff"
+            emissiveIntensity={1.5}
+            transparent
+            opacity={0.5}
           />
-        </bufferGeometry>
-        <pointsMaterial
-          size={0.05}
-          color="#00ffff"
-          transparent
-          opacity={0.25}
-          sizeAttenuation
-          alphaMap={circleTexture}
-          alphaTest={0.01}
-          depthWrite={false}
-        />
-      </points>
+        </mesh>
 
-      {/* Inner ring */}
-      <mesh ref={ringRef}>
-        <torusGeometry args={[1.4, 0.006, 16, 120]} />
-        <meshStandardMaterial
-          color="#00ffff"
-          emissive="#00ffff"
-          emissiveIntensity={1.5}
-          transparent
-          opacity={0.5}
-        />
-      </mesh>
+        {/* Outer ring */}
+        <mesh ref={ring2Ref}>
+          <torusGeometry args={[1.8, 0.003, 16, 120]} />
+          <meshStandardMaterial
+            color="#9966ff"
+            emissive="#9966ff"
+            emissiveIntensity={1.5}
+            transparent
+            opacity={0.3}
+          />
+        </mesh>
 
-      {/* Outer ring */}
-      <mesh ref={ring2Ref}>
-        <torusGeometry args={[1.8, 0.003, 16, 120]} />
-        <meshStandardMaterial
-          color="#9966ff"
-          emissive="#9966ff"
-          emissiveIntensity={1.5}
-          transparent
-          opacity={0.3}
-        />
-      </mesh>
+        {/* Core glow */}
+        <mesh ref={coreRef}>
+          <sphereGeometry args={[0.15, 32, 32]} />
+          <meshStandardMaterial
+            color="#00ffff"
+            emissive="#00ffff"
+            emissiveIntensity={2}
+            transparent
+            opacity={0.5}
+          />
+        </mesh>
 
-      {/* Core glow */}
-      <mesh>
-        <sphereGeometry args={[0.15, 32, 32]} />
-        <meshStandardMaterial
-          color="#00ffff"
-          emissive="#00ffff"
-          emissiveIntensity={2}
-          transparent
-          opacity={0.5}
-        />
-      </mesh>
+      </group>
 
       {/* Name and title */}
       <group ref={groupRef}>
