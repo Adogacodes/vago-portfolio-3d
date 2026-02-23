@@ -1,21 +1,20 @@
-import { useState, useRef } from "react"
+import { useState } from "react"
 import { Canvas } from "@react-three/fiber"
 import HUD from "./components/HUD"
 import NavigationDot from "./components/NavigationDot"
 import HomeScene from "./components/scenes/HomeScene"
 import SummaryScene from "./components/scenes/SummaryScene"
-import SkillsScene from "./components/scenes/SkillsScene"
+import SkillsScene, { SkillsOverlay } from "./components/scenes/SkillsScene"
 import ProjectsScene from "./components/scenes/ProjectsScene"
 import TransitionManager from "./components/TransitionManager"
 import useScrollSection from "./hooks/useScrollSection"
 import SpaceshipCursor from "./components/SpaceshipCursor"
 
-// color theme per section
 const SECTION_COLORS = [
-  "#00ffff", // Home - cyan
-  "#ffaa00", // Summary - gold
-  "#00ff88", // Skills - green
-  "#ff44aa", // Projects - pink
+  "#00ffff",
+  "#ffaa00",
+  "#00ff88",
+  "#ff44aa",
 ]
 
 export default function App() {
@@ -27,7 +26,7 @@ export default function App() {
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
 
-      {/* Fade to black overlay for Summary->Skills transition */}
+      {/* Fade overlay */}
       <div
         id="transition-overlay"
         style={{
@@ -63,10 +62,13 @@ export default function App() {
         {visibleSection === 3 && <ProjectsScene />}
       </Canvas>
 
-      {/* HUD - color changes per scene */}
+      {/* Skills HTML overlay — outside Canvas! */}
+      {visibleSection === 2 && <SkillsOverlay />}
+
+      {/* HUD */}
       <HUD accentColor={accentColor} />
 
-      {/* Navigation dots - color changes per scene */}
+      {/* Navigation dots */}
       <NavigationDot
         currentSection={visibleSection}
         accentColor={accentColor}

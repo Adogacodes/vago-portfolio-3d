@@ -12,10 +12,31 @@ export const summary = `
   complex problems and turning ideas into reality through code.
 ` // TODO: Replace with your real professional summary
 
-export const skills = [
-  "JavaScript", "React", "Node.js", "Express",
-  "MongoDB", "Git", "Github", "HTML", "CSS",
-] // TODO: Update with your real skills
+export const skillCategories = [
+  {
+    name: "Frontend",
+    color: "#00ffff",
+    skills: ["HTML", "CSS", "JavaScript", "React"]
+  },
+  {
+    name: "Backend",
+    color: "#ff88cc",
+    skills: ["Node.js", "Express"]  // TODO: update with your real backend skills
+  },
+  {
+    name: "Database",
+    color: "#ffaa00",
+    skills: ["MongoDB"] // TODO: update with your real database skills
+  },
+  {
+    name: "Tools",
+    color: "#00ff88",
+    skills: ["Git", "Github"] // TODO: update with your real tools
+  }
+]
+
+// keep this for anything that still imports skills as a flat array
+export const skills = skillCategories.flatMap(c => c.skills)
 
 export const projects = [
   {
