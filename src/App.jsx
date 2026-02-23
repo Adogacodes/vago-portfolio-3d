@@ -8,6 +8,7 @@ import SkillsScene from "./components/scenes/SkillsScene"
 import ProjectsScene from "./components/scenes/ProjectsScene"
 import TransitionManager from "./components/TransitionManager"
 import useScrollSection from "./hooks/useScrollSection"
+import SpaceshipCursor from "./components/SpaceshipCursor"
 
 // color theme per section
 const SECTION_COLORS = [
@@ -41,6 +42,9 @@ export default function App() {
           zIndex: 100,
         }}
       />
+
+      {/* Spaceship cursor */}
+      <SpaceshipCursor accentColor={accentColor} />
 
       {/* 3D Canvas */}
       <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>

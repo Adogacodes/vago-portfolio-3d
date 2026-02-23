@@ -1,8 +1,9 @@
-import { useRef, useMemo } from "react"
+import { useRef, useMemo, useEffect } from "react"
 import { useFrame } from "@react-three/fiber"
 import { Text, Stars } from "@react-three/drei"
 import { summary } from "../../constants/data"
 import * as THREE from "three"
+import { gsap } from "gsap"
 
 function createCircleTexture() {
   const canvas = document.createElement("canvas")
@@ -21,12 +22,42 @@ function createCircleTexture() {
 }
 
 export default function SummaryScene() {
+  const groupRef = useRef()
+  const helixRef = useRef()
   const ringRef = useRef()
   const ring2Ref = useRef()
-  const particlesRef = useRef()
+  const titleRef = useRef()
+  const textRef = useRef()
 
   const circleTexture = useMemo(() => createCircleTexture(), [])
 
+  // helix particles
+  const helix = useMemo(() => {
+    const count = 600
+    const positions = new Float32Array(count * 3)
+    const colors = new Float32Array(count * 3)
+
+    for (let i = 0; i < count; i++) {
+      const t = (i / count) * Math.PI * 8
+      const radius = 2.5
+
+      // two strands of the helix
+      const strand = i % 2 === 0 ? 0 : Math.PI
+
+      positions[i * 3] = Math.cos(t + strand) * radius
+      positions[i * 3 + 1] = (i / count) * 6 - 3
+      positions[i * 3 + 2] = Math.sin(t + strand) * radius
+
+      // gold to orange gradient
+      colors[i * 3] = 0.9 + Math.random() * 0.1
+      colors[i * 3 + 1] = 0.5 + Math.random() * 0.4
+      colors[i * 3 + 2] = 0
+    }
+
+    return { positions, colors }
+  }, [])
+
+  // background particles
   const particles = useMemo(() => {
     const count = 800
     const positions = new Float32Array(count * 3)
@@ -41,7 +72,6 @@ export default function SummaryScene() {
       positions[i * 3 + 1] = spread
       positions[i * 3 + 2] = Math.sin(angle) * radius
 
-      // warm gold to orange colors for this scene
       colors[i * 3] = 0.9 + Math.random() * 0.1
       colors[i * 3 + 1] = 0.6 + Math.random() * 0.3
       colors[i * 3 + 2] = Math.random() * 0.2
@@ -50,12 +80,36 @@ export default function SummaryScene() {
     return { positions, colors }
   }, [])
 
+  // intro animation
+  useEffect(() => {
+    if (!groupRef.current || !helixRef.current) return
+
+    // start below and invisible
+    groupRef.current.position.y = -5
+    helixRef.current.position.y = -5
+
+    // fly up into position
+    gsap.to(groupRef.current.position, {
+      y: 0,
+      duration: 1,
+      ease: "power3.out",
+      delay: 0.2
+    })
+
+    gsap.to(helixRef.current.position, {
+      y: 0,
+      duration: 1.2,
+      ease: "power3.out",
+      delay: 0.1
+    })
+  }, [])
+
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime()
 
-    if (particlesRef.current) {
-      particlesRef.current.rotation.y = t * 0.06
-      particlesRef.current.rotation.x = Math.sin(t * 0.04) * 0.15
+    // slowly rotate the helix
+    if (helixRef.current) {
+      helixRef.current.rotation.y = t * 0.2
     }
 
     if (ringRef.current) {
@@ -83,8 +137,8 @@ export default function SummaryScene() {
         speed={0.5}
       />
 
-      {/* Particles */}
-      <points ref={particlesRef}>
+      {/* Background particles */}
+      <points>
         <bufferGeometry>
           <bufferAttribute
             attach="attributes-position"
@@ -100,6 +154,30 @@ export default function SummaryScene() {
           vertexColors
           transparent
           opacity={0.25}
+          sizeAttenuation
+          alphaMap={circleTexture}
+          alphaTest={0.01}
+          depthWrite={false}
+        />
+      </points>
+
+      {/* Helix */}
+      <points ref={helixRef}>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            args={[helix.positions, 3]}
+          />
+          <bufferAttribute
+            attach="attributes-color"
+            args={[helix.colors, 3]}
+          />
+        </bufferGeometry>
+        <pointsMaterial
+          size={0.05}
+          vertexColors
+          transparent
+          opacity={0.8}
           sizeAttenuation
           alphaMap={circleTexture}
           alphaTest={0.01}
@@ -142,34 +220,39 @@ export default function SummaryScene() {
         />
       </mesh>
 
-      {/* Section title */}
-      <Text
-        position={[0, 1.5, 0]}
-        fontSize={0.35}
-        color="#ffaa00"
-        anchorX="center"
-        anchorY="middle"
-        letterSpacing={0.15}
-        outlineWidth={0.01}
-        outlineColor="#ffaa00"
-      >
-        ABOUT ME
-      </Text>
+      {/* Text group flies in */}
+      <group ref={groupRef}>
+        <Text
+          ref={titleRef}
+          position={[0, 0.7, 0]}
+          fontSize={0.4}
+          color="#ffaa00"
+          anchorX="center"
+          anchorY="middle"
+          letterSpacing={0.25}
+          outlineWidth={0.015}
+          outlineColor="#ff6600"
+        >
+          ABOUT ME
+        </Text>
 
-      {/* Summary text */}
-      <Text
-        position={[0, 0.2, 0]}
-        fontSize={0.14}
-        color="#ffffffcc"
-        anchorX="center"
-        anchorY="middle"
-        letterSpacing={0.03}
-        lineHeight={1.8}
-        maxWidth={5}
-        textAlign="center"
-      >
-        {summary}
-      </Text>
+        <Text
+          ref={textRef}
+          position={[0, -0.35, 0]}
+          fontSize={0.2}
+          color="#ffffffcc"
+          anchorX="center"
+          anchorY="middle"
+          letterSpacing={0.06}
+          lineHeight={1.7}
+          maxWidth={7}
+          textAlign="center"
+          outlineWidth={0.005}
+          outlineColor="#ffaa0066"
+        >
+          {summary}
+        </Text>
+      </group>
 
       <ambientLight intensity={0.3} />
       <pointLight position={[0, 0, 3]} intensity={1.5} color="#ffaa00" />
