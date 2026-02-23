@@ -24,6 +24,7 @@ function createCircleTexture() {
 export default function SummaryScene() {
   const groupRef = useRef()
   const helixRef = useRef()
+  const hasAnimated = useRef(false)
   const ringRef = useRef()
   const ring2Ref = useRef()
   const titleRef = useRef()
@@ -108,20 +109,18 @@ export default function SummaryScene() {
   useEffect(() => {
   if (!groupRef.current || !helixRef.current || !particlesRef.current) return
 
-  // start everything below
-  groupRef.current.position.y = -5
-  helixRef.current.position.y = -5
-  particlesRef.current.position.y = -5
+  // set BEFORE first render using layout timing
+  gsap.set(groupRef.current.position, { y: -8 })
+  gsap.set(helixRef.current.position, { y: -8 })
+  gsap.set(particlesRef.current.scale, { x: 0, y: 0, z: 0 })
 
-  // particles spring up first
-  gsap.to(particlesRef.current.position, {
-    y: 0,
+  gsap.to(particlesRef.current.scale, {
+    x: 1, y: 1, z: 1,
     duration: 1.4,
     ease: "elastic.out(1, 0.6)",
     delay: 0.1
   })
 
-  // helix springs up second
   gsap.to(helixRef.current.position, {
     y: 0,
     duration: 1.4,
@@ -129,7 +128,6 @@ export default function SummaryScene() {
     delay: 0.2
   })
 
-  // text group springs up last
   gsap.to(groupRef.current.position, {
     y: 0,
     duration: 1.4,
@@ -137,7 +135,9 @@ export default function SummaryScene() {
     delay: 0.3
   })
 }, [])
-  useFrame(({ clock }) => {
+
+
+ useFrame(({ clock }) => {
   const t = clock.getElapsedTime()
 
   if (helixRef.current) {
@@ -147,17 +147,22 @@ export default function SummaryScene() {
   if (ringRef.current) {
     ringRef.current.rotation.z = t * 0.3
     ringRef.current.rotation.x = Math.sin(t * 0.2) * 0.3
-    ringRef.current.scale.setScalar(1 + Math.sin(t * 1.2) * 0.03)
+    // dont use setScalar on rings — let them animate freely
+    const pulse = 1 + Math.sin(t * 1.2) * 0.03
+    ringRef.current.scale.x = pulse
+    ringRef.current.scale.z = pulse
   }
 
   if (ring2Ref.current) {
     ring2Ref.current.rotation.z = -t * 0.2
     ring2Ref.current.rotation.y = t * 0.15
-    ring2Ref.current.scale.setScalar(1 + Math.sin(t * 1.2 + 1) * 0.03)
+    const pulse2 = 1 + Math.sin(t * 1.2 + 1) * 0.03
+    ring2Ref.current.scale.x = pulse2
+    ring2Ref.current.scale.z = pulse2
   }
 
-  // rotating background particles
-  if (particlesRef.current) {
+  // only rotate particles AFTER gsap scale animation is done
+  if (particlesRef.current && particlesRef.current.scale.x > 0.95) {
     particlesRef.current.rotation.y = t * 0.06
     particlesRef.current.rotation.x = Math.sin(t * 0.04) * 0.15
   }
