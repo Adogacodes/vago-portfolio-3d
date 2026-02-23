@@ -118,7 +118,7 @@ export function SkillsBackground() {
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2
       const radius = 4 + Math.random() * 8
-      const spread = (Math.random() - 0.5) * 3
+      const spread = (Math.random() - 0.5) * 8
       positions[i * 3] = Math.cos(angle) * radius
       positions[i * 3 + 1] = spread
       positions[i * 3 + 2] = Math.sin(angle) * radius

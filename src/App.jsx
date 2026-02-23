@@ -5,7 +5,7 @@ import NavigationDot from "./components/NavigationDot"
 import HomeScene from "./components/scenes/HomeScene"
 import SummaryScene from "./components/scenes/SummaryScene"
 import SkillsScene, { SkillsOverlay } from "./components/scenes/SkillsScene"
-import ProjectsScene from "./components/scenes/ProjectsScene"
+import ProjectsScene, { ProjectsOverlay } from "./components/scenes/ProjectsScene"
 import TransitionManager from "./components/TransitionManager"
 import useScrollSection from "./hooks/useScrollSection"
 import SpaceshipCursor from "./components/SpaceshipCursor"
@@ -64,6 +64,7 @@ export default function App() {
 
       {/* Skills HTML overlay — outside Canvas! */}
       {visibleSection === 2 && <SkillsOverlay />}
+      {visibleSection === 3 && <ProjectsOverlay />}
 
       {/* HUD */}
       <HUD accentColor={accentColor} />
