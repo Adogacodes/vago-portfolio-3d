@@ -46,12 +46,25 @@
   font-size: 13px;
   letter-spacing: 1px;
   text-transform: uppercase;
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.3s;
+  position: relative;
+  transition: all 0.3s ease;
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid transparent;
 }
 
 .hud-link:hover {
-  border-color: #00ffff;
+  color: #ffffff;
+  border-color: currentColor;
+  background: rgba(255, 255, 255, 0.05);
+  text-shadow:
+    0 0 8px currentColor,
+    0 0 20px currentColor;
+  box-shadow:
+    0 0 12px rgba(255, 255, 255, 0.1),
+    inset 0 0 12px rgba(255, 255, 255, 0.05);
+  transform: translateY(-2px) scale(1.08);
+  letter-spacing: 2px;
 }
 
 .hud-bottom-center {

@@ -22,7 +22,7 @@
     0 0 10px rgba(0, 255, 136, 0.8),
     0 0 30px rgba(0, 255, 136, 0.4);
   margin-bottom: 36px;
-  animation: titlePulse 3s ease-in-out infinite;
+  animation: skillsTitlePulse 3s ease-in-out infinite;
 }
 
 .skills-grid {
@@ -55,7 +55,6 @@
   overflow: hidden;
 }
 
-/* shimmer line that sweeps across on load */
 .skill-card::before {
   content: "";
   position: absolute;
@@ -73,7 +72,6 @@
   animation-delay: inherit;
 }
 
-/* glowing bottom border that pulses */
 .skill-card::after {
   content: "";
   position: absolute;
@@ -159,7 +157,7 @@
   50% { opacity: 1; }
 }
 
-@keyframes titlePulse {
+@keyframes skillsTitlePulse {
   0%, 100% {
     text-shadow:
       0 0 10px rgba(0, 255, 136, 0.8),
