@@ -18,7 +18,7 @@ const SECTION_COLORS = [
 ]
 
 export default function App() {
-  const { currentSection, previousSection } = useScrollSection()
+  const { currentSection, previousSection, goToSection } = useScrollSection()
   const [visibleSection, setVisibleSection] = useState(0)
 
   const accentColor = SECTION_COLORS[visibleSection]
@@ -73,6 +73,8 @@ export default function App() {
       <NavigationDot
         currentSection={visibleSection}
         accentColor={accentColor}
+        goToSection={goToSection}
+
       />
 
     </div>

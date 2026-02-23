@@ -5,22 +5,35 @@ export default function SpaceshipCursor({ accentColor }) {
   const cursorRef = useRef()
   const canvasRef = useRef()
   const particlesRef = useRef([])
-  const particleId = useRef(0)
   const animationRef = useRef()
   const accentColorRef = useRef(accentColor)
+  const lastSpawnTime = useRef(0)
+  const frameCount = useRef(0)
+  const isVisible = useRef(false)
 
-  // keep accentColor up to date without restarting the loop
   useEffect(() => {
     accentColorRef.current = accentColor
   }, [accentColor])
 
   useEffect(() => {
     const canvas = canvasRef.current
-    const ctx = canvas.getContext("2d")
+    const ctx = canvas.getContext("2d", { alpha: true })
 
-    // make canvas full screen
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
+
+    const show = () => {
+      if (isVisible.current) return
+      isVisible.current = true
+      if (cursorRef.current) cursorRef.current.style.opacity = "1"
+      if (canvasRef.current) canvasRef.current.style.opacity = "1"
+    }
+
+    const hide = () => {
+      isVisible.current = false
+      if (cursorRef.current) cursorRef.current.style.opacity = "0"
+      if (canvasRef.current) canvasRef.current.style.opacity = "0"
+    }
 
     const handleResize = () => {
       canvas.width = window.innerWidth
@@ -28,60 +41,72 @@ export default function SpaceshipCursor({ accentColor }) {
     }
 
     const handleMouseMove = (e) => {
-      const x = e.clientX
-      const y = e.clientY
+      show()
 
-      // move spaceship
       if (cursorRef.current) {
-        cursorRef.current.style.left = `${x}px`
-        cursorRef.current.style.top = `${y}px`
+        cursorRef.current.style.left = `${e.clientX}px`
+        cursorRef.current.style.top = `${e.clientY}px`
       }
 
-      // spawn fewer particles per move
-      for (let i = 0; i < 2; i++) {
-        particlesRef.current.push({
-          id: particleId.current++,
-          x: x + (Math.random() - 0.5) * 8,
-          y: y + (Math.random() - 0.5) * 8,
-          size: Math.random() * 3 + 1,
-          opacity: Math.random() * 0.7 + 0.2,
-          vx: (Math.random() - 0.5) * 1.2,
-          vy: (Math.random() - 0.5) * 1.2 + 0.3,
-          life: 1,
-          decay: Math.random() * 0.025 + 0.015,
-        })
+      const now = Date.now()
+      if (now - lastSpawnTime.current < 60) return
+      lastSpawnTime.current = now
+
+      particlesRef.current.push({
+        x: e.clientX,
+        y: e.clientY,
+        size: 2,
+        vx: (Math.random() - 0.5) * 0.6,
+        vy: (Math.random() - 0.5) * 0.6,
+        life: 1,
+      })
+
+      if (particlesRef.current.length > 12) {
+        particlesRef.current.shift()
       }
     }
 
-    // animation loop — draws on canvas instead of DOM
+    const handleMouseLeave = (e) => {
+      if (
+        e.clientY <= 0 ||
+        e.clientX <= 0 ||
+        e.clientX >= window.innerWidth ||
+        e.clientY >= window.innerHeight
+      ) {
+        hide()
+      }
+    }
+
     const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      frameCount.current++
 
-      particlesRef.current = particlesRef.current.filter(p => p.life > 0)
+      if (frameCount.current % 2 === 0) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      for (const p of particlesRef.current) {
-        // update
-        p.x += p.vx
-        p.y += p.vy
-        p.vx *= 0.97
-        p.vy *= 0.97
-        p.size *= 0.97
-        p.life -= p.decay
-        p.opacity = p.life * 0.8
+        for (let i = particlesRef.current.length - 1; i >= 0; i--) {
+          const p = particlesRef.current[i]
 
-        // draw glowing circle on canvas
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
-        ctx.fillStyle = accentColorRef.current
-        ctx.globalAlpha = p.opacity
-        ctx.shadowBlur = p.size * 3
-        ctx.shadowColor = accentColorRef.current
-        ctx.fill()
-        ctx.closePath()
+          p.x += p.vx
+          p.y += p.vy
+          p.life -= 0.05
+          p.size *= 0.95
+
+          if (p.life <= 0) {
+            particlesRef.current.splice(i, 1)
+            continue
+          }
+
+          ctx.beginPath()
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
+          ctx.fillStyle = accentColorRef.current
+          ctx.globalAlpha = p.life * 0.6
+          ctx.fill()
+          ctx.closePath()
+        }
+
+        ctx.globalAlpha = 1
       }
 
-      ctx.globalAlpha = 1
-      ctx.shadowBlur = 0
       animationRef.current = requestAnimationFrame(animate)
     }
 
@@ -89,17 +114,18 @@ export default function SpaceshipCursor({ accentColor }) {
 
     window.addEventListener("mousemove", handleMouseMove)
     window.addEventListener("resize", handleResize)
+    document.addEventListener("mouseleave", handleMouseLeave)
 
     return () => {
       cancelAnimationFrame(animationRef.current)
       window.removeEventListener("mousemove", handleMouseMove)
       window.removeEventListener("resize", handleResize)
+      document.removeEventListener("mouseleave", handleMouseLeave)
     }
   }, [])
 
   return (
     <>
-      {/* Single canvas for all particles */}
       <canvas
         ref={canvasRef}
         style={{
@@ -108,18 +134,23 @@ export default function SpaceshipCursor({ accentColor }) {
           left: 0,
           pointerEvents: "none",
           zIndex: 9998,
+          opacity: 0,
+          transition: "opacity 0.3s ease",
         }}
       />
 
-      {/* Spaceship cursor */}
-      <div ref={cursorRef} className="spaceship-cursor">
+      <div
+        ref={cursorRef}
+        className="spaceship-cursor"
+        style={{ opacity: 0, transition: "opacity 0.3s ease" }}
+      >
         <svg
-          width="32"
-          height="32"
+          width="28"
+          height="28"
           viewBox="0 0 32 32"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          style={{ transform: "rotate(135deg)" }}
+          style={{ transform: "rotate(45deg)" }}
         >
           <path
             d="M16 2 L20 24 L16 20 L12 24 Z"
