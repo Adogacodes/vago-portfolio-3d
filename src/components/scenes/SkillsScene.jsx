@@ -1,7 +1,8 @@
-import { useRef, useMemo } from "react"
+import { useRef, useMemo, useEffect } from "react"
 import { useFrame } from "@react-three/fiber"
 import { Stars } from "@react-three/drei"
 import { skillCategories } from "../../constants/data"
+import { gsap } from "gsap"
 import * as THREE from "three"
 import "./SkillsScene.css"
 
@@ -128,6 +129,20 @@ export function SkillsBackground() {
     }
     return { positions, colors }
   }, [])
+
+  useEffect(() => {
+  if (!particlesRef.current) return
+
+  // particles expand outward from center
+  particlesRef.current.scale.set(0, 0, 0)
+
+  gsap.to(particlesRef.current.scale, {
+    x: 1, y: 1, z: 1,
+    duration: 1.4,
+    ease: "elastic.out(1, 0.6)",
+    delay: 0.1
+  })
+}, [])
 
   const nebulaPuffs = useMemo(() => (
     Array.from({ length: 8 }, (_, i) => ({

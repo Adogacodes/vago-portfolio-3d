@@ -1,4 +1,5 @@
 import { useRef, useMemo, useState, useEffect, useCallback } from "react"
+import { gsap } from "gsap"
 import { useFrame } from "@react-three/fiber"
 import { Stars } from "@react-three/drei"
 import * as THREE from "three"
@@ -178,7 +179,6 @@ function NeonParticles() {
     return { positions, colors }
   }, [])
 
-  // space particles rotating in background
   const spaceParticles = useMemo(() => {
     const count = 600
     const positions = new Float32Array(count * 3)
@@ -193,7 +193,6 @@ function NeonParticles() {
       positions[i * 3 + 1] = spread
       positions[i * 3 + 2] = Math.sin(angle) * radius
 
-      // pink to purple tones matching cyberpunk
       colors[i * 3] = 0.8 + Math.random() * 0.2
       colors[i * 3 + 1] = Math.random() * 0.2
       colors[i * 3 + 2] = 0.5 + Math.random() * 0.5
@@ -202,8 +201,32 @@ function NeonParticles() {
     return { positions, colors }
   }, [])
 
+  // spring effect on mount
+  useEffect(() => {
+    if (!spaceRef.current || !ref.current) return
+
+    // both start at scale 0
+    spaceRef.current.scale.set(0, 0, 0)
+    ref.current.scale.set(0, 0, 0)
+
+    // space particles expand outward first
+    gsap.to(spaceRef.current.scale, {
+      x: 1, y: 1, z: 1,
+      duration: 1.4,
+      ease: "elastic.out(1, 0.6)",
+      delay: 0.1
+    })
+
+    // neon rising particles expand slightly after
+    gsap.to(ref.current.scale, {
+      x: 1, y: 1, z: 1,
+      duration: 1.4,
+      ease: "elastic.out(1, 0.6)",
+      delay: 0.3
+    })
+  }, [])
+
   useFrame(({ clock }) => {
-    // rising neon particles
     if (ref.current) {
       const positions = ref.current.geometry.attributes.position.array
       for (let i = 0; i < positions.length; i += 3) {
@@ -213,7 +236,6 @@ function NeonParticles() {
       ref.current.geometry.attributes.position.needsUpdate = true
     }
 
-    // slowly rotating space particles
     if (spaceRef.current) {
       const t = clock.getElapsedTime()
       spaceRef.current.rotation.y = t * 0.05
@@ -223,7 +245,6 @@ function NeonParticles() {
 
   return (
     <>
-      {/* Rising neon city particles — round circles */}
       <points ref={ref}>
         <bufferGeometry>
           <bufferAttribute
@@ -247,7 +268,6 @@ function NeonParticles() {
         />
       </points>
 
-      {/* Space particles rotating in background — round circles */}
       <points ref={spaceRef}>
         <bufferGeometry>
           <bufferAttribute
