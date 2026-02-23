@@ -16,7 +16,7 @@ export const skillCategories = [
   {
     name: "Frontend",
     color: "#00ffff",
-    skills: ["HTML", "CSS", "JavaScript", "React"]
+    skills: ["HTML", "CSS", "JavaScript", "React", "Typescript"]
   },
   {
     name: "Backend",
