@@ -8,17 +8,19 @@ export default function NavigationDot({ currentSection, accentColor, goToSection
       {SECTIONS.map((section, index) => (
         <div
           key={section}
-          className={`nav-dot ${currentSection === index ? "active" : ""}`}
+          className="nav-dot-wrapper"
           title={section}
           onClick={() => goToSection(index)}
-          style={{
-            ...(currentSection === index ? {
+        >
+          <div
+            className={`nav-dot ${currentSection === index ? "active" : ""}`}
+            style={currentSection === index ? {
               backgroundColor: accentColor,
               borderColor: accentColor,
-            } : {}),
-            cursor: "pointer",
-          }}
-        />
+              boxShadow: `0 0 8px ${accentColor}`
+            } : {}}
+          />
+        </div>
       ))}
     </div>
   )

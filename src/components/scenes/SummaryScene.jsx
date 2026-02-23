@@ -28,8 +28,32 @@ export default function SummaryScene() {
   const ring2Ref = useRef()
   const titleRef = useRef()
   const textRef = useRef()
+  const particlesRef = useRef()
 
   const circleTexture = useMemo(() => createCircleTexture(), [])
+
+  const backgroundParticles = useMemo(() => {
+  const count = 400
+  const positions = new Float32Array(count * 3)
+  const colors = new Float32Array(count * 3)
+
+  for (let i = 0; i < count; i++) {
+    const angle = Math.random() * Math.PI * 2
+    const radius = 4 + Math.random() * 8
+    const spread = (Math.random() - 0.5) * 8
+
+    positions[i * 3] = Math.cos(angle) * radius
+    positions[i * 3 + 1] = spread
+    positions[i * 3 + 2] = Math.sin(angle) * radius
+
+    // gold tones to match summary scene
+    colors[i * 3] = 0.9 + Math.random() * 0.1
+    colors[i * 3 + 1] = 0.6 + Math.random() * 0.3
+    colors[i * 3 + 2] = Math.random() * 0.2
+  }
+
+  return { positions, colors }
+}, [])
 
   // helix particles
   const helix = useMemo(() => {
@@ -59,14 +83,14 @@ export default function SummaryScene() {
 
   // background particles
   const particles = useMemo(() => {
-    const count = 800
+    const count = 400
     const positions = new Float32Array(count * 3)
     const colors = new Float32Array(count * 3)
 
     for (let i = 0; i < count; i++) {
       const angle = Math.random() * Math.PI * 2
       const radius = 4 + Math.random() * 8
-      const spread = (Math.random() - 0.5) * 3
+      const spread = (Math.random() - 0.5) * 8
 
       positions[i * 3] = Math.cos(angle) * radius
       positions[i * 3 + 1] = spread
@@ -82,48 +106,62 @@ export default function SummaryScene() {
 
   // intro animation
   useEffect(() => {
-    if (!groupRef.current || !helixRef.current) return
+  if (!groupRef.current || !helixRef.current || !particlesRef.current) return
 
-    // start below and invisible
-    groupRef.current.position.y = -5
-    helixRef.current.position.y = -5
+  // start everything below
+  groupRef.current.position.y = -5
+  helixRef.current.position.y = -5
+  particlesRef.current.position.y = -5
 
-    // fly up into position
-    gsap.to(groupRef.current.position, {
-      y: 0,
-      duration: 1,
-      ease: "power3.out",
-      delay: 0.2
-    })
-
-    gsap.to(helixRef.current.position, {
-      y: 0,
-      duration: 1.2,
-      ease: "power3.out",
-      delay: 0.1
-    })
-  }, [])
-
-  useFrame(({ clock }) => {
-    const t = clock.getElapsedTime()
-
-    // slowly rotate the helix
-    if (helixRef.current) {
-      helixRef.current.rotation.y = t * 0.2
-    }
-
-    if (ringRef.current) {
-      ringRef.current.rotation.z = t * 0.3
-      ringRef.current.rotation.x = Math.sin(t * 0.2) * 0.3
-      ringRef.current.scale.setScalar(1 + Math.sin(t * 1.2) * 0.03)
-    }
-
-    if (ring2Ref.current) {
-      ring2Ref.current.rotation.z = -t * 0.2
-      ring2Ref.current.rotation.y = t * 0.15
-      ring2Ref.current.scale.setScalar(1 + Math.sin(t * 1.2 + 1) * 0.03)
-    }
+  // particles spring up first
+  gsap.to(particlesRef.current.position, {
+    y: 0,
+    duration: 1.4,
+    ease: "elastic.out(1, 0.6)",
+    delay: 0.1
   })
+
+  // helix springs up second
+  gsap.to(helixRef.current.position, {
+    y: 0,
+    duration: 1.4,
+    ease: "elastic.out(1, 0.6)",
+    delay: 0.2
+  })
+
+  // text group springs up last
+  gsap.to(groupRef.current.position, {
+    y: 0,
+    duration: 1.4,
+    ease: "elastic.out(1, 0.6)",
+    delay: 0.3
+  })
+}, [])
+  useFrame(({ clock }) => {
+  const t = clock.getElapsedTime()
+
+  if (helixRef.current) {
+    helixRef.current.rotation.y = t * 0.2
+  }
+
+  if (ringRef.current) {
+    ringRef.current.rotation.z = t * 0.3
+    ringRef.current.rotation.x = Math.sin(t * 0.2) * 0.3
+    ringRef.current.scale.setScalar(1 + Math.sin(t * 1.2) * 0.03)
+  }
+
+  if (ring2Ref.current) {
+    ring2Ref.current.rotation.z = -t * 0.2
+    ring2Ref.current.rotation.y = t * 0.15
+    ring2Ref.current.scale.setScalar(1 + Math.sin(t * 1.2 + 1) * 0.03)
+  }
+
+  // rotating background particles
+  if (particlesRef.current) {
+    particlesRef.current.rotation.y = t * 0.06
+    particlesRef.current.rotation.x = Math.sin(t * 0.04) * 0.15
+  }
+})
 
   return (
     <>
@@ -137,8 +175,10 @@ export default function SummaryScene() {
         speed={0.5}
       />
 
+      
+
       {/* Background particles */}
-      <points>
+      <points ref={particlesRef}>
         <bufferGeometry>
           <bufferAttribute
             attach="attributes-position"

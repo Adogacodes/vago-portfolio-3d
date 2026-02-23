@@ -1,28 +1,39 @@
 .nav-dots-container {
   position: fixed;
-  right: 24px;
+  right: 20px;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 4px;
   z-index: 10;
   pointer-events: all;
 }
 
+.nav-dot-wrapper {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  pointer-events: all;
+}
+
+.nav-dot-wrapper:hover .nav-dot {
+  transform: scale(1.5);
+  background-color: #ffffff88;
+  border-color: #ffffff88;
+}
+
 .nav-dot {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background-color: #ffffff33;
   border: 1px solid #ffffff55;
   transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.nav-dot:hover {
-  transform: scale(1.4);
-  background-color: #ffffff55;
+  pointer-events: none;
 }
 
 .nav-dot.active {
