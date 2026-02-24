@@ -2,10 +2,86 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>vago-portfolio-3d</title>
+    <title>VAGO.DEV</title>
+    <link rel="stylesheet" type='text/css' href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
+    <script>
+      // generate rocket favicon dynamically
+      const canvas = document.createElement("canvas")
+      canvas.width = 64
+      canvas.height = 64
+      const ctx = canvas.getContext("2d")
+
+      // black background
+      ctx.fillStyle = "#000000"
+      ctx.fillRect(0, 0, 64, 64)
+
+      // outer glow circle
+      const glow = ctx.createRadialGradient(32, 32, 0, 32, 32, 32)
+      glow.addColorStop(0, "rgba(0, 255, 255, 0.15)")
+      glow.addColorStop(1, "rgba(0, 0, 0, 0)")
+      ctx.fillStyle = glow
+      ctx.beginPath()
+      ctx.arc(32, 32, 32, 0, Math.PI * 2)
+      ctx.fill()
+
+      // rocket body
+      ctx.fillStyle = "#00ffff"
+      ctx.shadowBlur = 10
+      ctx.shadowColor = "#00ffff"
+      ctx.beginPath()
+      ctx.moveTo(32, 8)       // nose tip
+      ctx.lineTo(40, 36)      // bottom right
+      ctx.lineTo(32, 30)      // bottom center
+      ctx.lineTo(24, 36)      // bottom left
+      ctx.closePath()
+      ctx.fill()
+
+      // rocket fins left
+      ctx.beginPath()
+      ctx.moveTo(24, 36)
+      ctx.lineTo(18, 46)
+      ctx.lineTo(26, 40)
+      ctx.closePath()
+      ctx.fill()
+
+      // rocket fins right
+      ctx.beginPath()
+      ctx.moveTo(40, 36)
+      ctx.lineTo(46, 46)
+      ctx.lineTo(38, 40)
+      ctx.closePath()
+      ctx.fill()
+
+      // rocket flame
+      ctx.shadowBlur = 12
+      ctx.shadowColor = "#ff8800"
+      const flame = ctx.createLinearGradient(32, 42, 32, 58)
+      flame.addColorStop(0, "#ff8800")
+      flame.addColorStop(0.5, "#ff4400")
+      flame.addColorStop(1, "rgba(255, 68, 0, 0)")
+      ctx.fillStyle = flame
+      ctx.beginPath()
+      ctx.moveTo(27, 42)
+      ctx.lineTo(32, 58)
+      ctx.lineTo(37, 42)
+      ctx.closePath()
+      ctx.fill()
+
+      // window
+      ctx.shadowBlur = 6
+      ctx.shadowColor = "#ffffff"
+      ctx.fillStyle = "#ffffff"
+      ctx.beginPath()
+      ctx.arc(32, 24, 4, 0, Math.PI * 2)
+      ctx.fill()
+
+      // set as favicon
+      const link = document.createElement("link")
+      link.rel = "icon"
+      link.href = canvas.toDataURL("image/png")
+      document.head.appendChild(link)
+    </script>
   </head>
   <body>
     <div id="root"></div>
