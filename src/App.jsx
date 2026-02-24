@@ -49,17 +49,10 @@ export default function App() {
 
       {/* 3D Canvas */}
       <Canvas
-        camera={{ position: [0, 0, 5], fov: 75 }}
-        dpr={1}
-        gl={{
-          antialias: false,
-          alpha: false,
-          powerPreference: "default",
-          failIfMajorPerformanceCaveat: false,
-          preserveDrawingBuffer: true
-        }}
-        style={{ background: "#000000" }}
-      >
+  camera={{ position: [0, 0, 5], fov: 75 }}
+  gl={{ antialias: true, alpha: false }}
+  style={{ background: "#000000" }}
+>
         <color attach="background" args={["#000000"]} />
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
