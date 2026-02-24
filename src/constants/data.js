@@ -44,7 +44,7 @@ export const skillCategories = [
     color: "#00ff88",
     skills: [
       { name: "Git", icon: "devicon-git-plain" },
-      { name: "Github", icon: "devicon-git-plain" },
+      { name: "Github", icon: "devicon-github-plain" },
       
     ]
   }
