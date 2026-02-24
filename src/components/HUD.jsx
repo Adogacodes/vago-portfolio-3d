@@ -16,7 +16,7 @@ export default function HUD({ accentColor }) {
       {/* Top right - Links */}
       <div className="hud-top-right">
         <a href={personalInfo.github} target="_blank" rel="noreferrer" className="hud-link" style={{ color: accentColor }}>
-          GitHub
+          Bobble
         </a>
         <a href={personalInfo.resume} target="_blank" rel="noreferrer" className="hud-link" style={{ color: accentColor }}>
           Resume
