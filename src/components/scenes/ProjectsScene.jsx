@@ -328,7 +328,7 @@ export function ProjectsOverlay() {
 
         {/* Left arrow */}
         <button
-          className="nav-arrow"
+          className="nav-arrow desktop-arrow"
           onClick={() => goTo(activeIndex - 1)}
           disabled={activeIndex === 0}
         >
@@ -364,7 +364,7 @@ export function ProjectsOverlay() {
 
         {/* Right arrow */}
         <button
-          className="nav-arrow"
+          className="nav-arrow desktop-arrow"
           onClick={() => goTo(activeIndex + 1)}
           disabled={activeIndex === projects.length - 1}
         >
@@ -374,6 +374,16 @@ export function ProjectsOverlay() {
       </div>
 
       {/* Dots */}
+       <div className="project-bottom">
+      {/* Left arrow — mobile only */}
+      <button
+        className="nav-arrow mobile-arrow"
+        onClick={() => goTo(activeIndex - 1)}
+        disabled={activeIndex === 0}
+      >
+        ←
+      </button>
+
       <div className="project-dots">
         {projects.map((_, i) => (
           <div
@@ -383,6 +393,16 @@ export function ProjectsOverlay() {
           />
         ))}
       </div>
+
+      {/* Right arrow — mobile only */}
+      <button
+        className="nav-arrow mobile-arrow"
+        onClick={() => goTo(activeIndex + 1)}
+        disabled={activeIndex === projects.length - 1}
+      >
+        →
+      </button>
+    </div>
 
     </div>
   )
