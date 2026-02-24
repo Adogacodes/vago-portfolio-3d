@@ -21,8 +21,7 @@ const SECTION_COLORS = [
 export default function App() {
   const { currentSection, previousSection, goToSection } = useScrollSection()
   const [visibleSection, setVisibleSection] = useState(0)
-
-  const { isMobile, isTablet, isTouch } = useDeviceDetect()
+  const { isMobile, isTablet } = useDeviceDetect()
 
   const accentColor = SECTION_COLORS[visibleSection]
 
@@ -45,27 +44,23 @@ export default function App() {
         }}
       />
 
-      {/* Spaceship cursor */}
-      {/* Spaceship cursor — hidden on touch devices */}
+      {/* Spaceship cursor — hidden on mobile and tablet */}
       {!isMobile && !isTablet && <SpaceshipCursor accentColor={accentColor} />}
 
       {/* 3D Canvas */}
-     <Canvas
-  camera={{ position: [0, 0, 5], fov: 75 }}
-  dpr={[1, 1.5]}
-  gl={{ 
-    antialias: true, 
-    alpha: false,
-    powerPreference: "high-performance",
-    failIfMajorPerformanceCaveat: false
-  }}
-  style={{ background: "#000000" }}
-  onCreated={({ gl }) => {
-    if (!gl) setWebGLFailed(true)
-  }}
-  onError={() => setWebGLFailed(true)}
->
-  <color attach="background" args={["#110022"]} />
+      <Canvas
+        camera={{ position: [0, 0, 5], fov: 75 }}
+        dpr={1}
+        gl={{
+          antialias: false,
+          alpha: false,
+          powerPreference: "default",
+          failIfMajorPerformanceCaveat: false,
+          preserveDrawingBuffer: true
+        }}
+        style={{ background: "#000000" }}
+      >
+        <color attach="background" args={["#000000"]} />
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
 
@@ -76,16 +71,12 @@ export default function App() {
         />
 
         {visibleSection === 0 && <HomeScene />}
-<mesh position={[0, 0, 0]}>
-  <sphereGeometry args={[1, 32, 32]} />
-  <meshStandardMaterial color="#00ffff" />
-</mesh>
         {visibleSection === 1 && <SummaryScene />}
         {visibleSection === 2 && <SkillsScene />}
         {visibleSection === 3 && <ProjectsScene />}
       </Canvas>
 
-      {/* Skills HTML overlay — outside Canvas! */}
+      {/* HTML overlays — outside Canvas */}
       {visibleSection === 2 && <SkillsOverlay />}
       {visibleSection === 3 && <ProjectsOverlay />}
 
@@ -97,7 +88,6 @@ export default function App() {
         currentSection={visibleSection}
         accentColor={accentColor}
         goToSection={goToSection}
-
       />
 
     </div>
