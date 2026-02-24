@@ -44,7 +44,7 @@
 /* Tablet and mobile — keep vertical but smaller on right side */
 @media (max-width: 1024px) {
   .nav-dots-container {
-    right: 12px;
+    right: 6px;
     top: 50%;
     transform: translateY(-50%);
     flex-direction: column;
@@ -52,12 +52,12 @@
   }
 
   .nav-dot-wrapper {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
   }
 
   .nav-dot {
-    width: 8px;
-    height: 8px;
+    width: 7px;
+    height: 7px;
   }
 }

@@ -348,7 +348,6 @@
   }
 }
 
-/* Mobile portrait */
 @media (max-width: 576px) {
   .projects-overlay {
     padding: 60px 12px 60px;
