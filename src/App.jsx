@@ -65,6 +65,7 @@ export default function App() {
   }}
   onError={() => setWebGLFailed(true)}
 >
+  <color attach="background" args={["#110022"]} />
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
 
@@ -75,6 +76,10 @@ export default function App() {
         />
 
         {visibleSection === 0 && <HomeScene />}
+<mesh position={[0, 0, 0]}>
+  <sphereGeometry args={[1, 32, 32]} />
+  <meshStandardMaterial color="#00ffff" />
+</mesh>
         {visibleSection === 1 && <SummaryScene />}
         {visibleSection === 2 && <SkillsScene />}
         {visibleSection === 3 && <ProjectsScene />}
