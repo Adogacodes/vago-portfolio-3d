@@ -50,7 +50,12 @@ export default function App() {
       {!isMobile && !isTablet && <SpaceshipCursor accentColor={accentColor} />}
 
       {/* 3D Canvas */}
-      <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>
+     <Canvas
+        camera={{ position: [0, 0, 5], fov: 75 }}
+        gl={{ antialias: true, alpha: false }}
+        style={{ background: "#000000" }}
+        onTouchStart={(e) => e.stopPropagation()}
+      >
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
 
