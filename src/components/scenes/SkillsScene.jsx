@@ -219,7 +219,7 @@ export function SkillsBackground() {
 export function SkillsOverlay() {
   const allSkills = useMemo(() =>
     skillCategories.flatMap(cat =>
-      cat.skills.map(skill => ({ skill }))
+      cat.skills.map(skill => ({ ...skill }))
     ), []
   )
 
@@ -227,18 +227,14 @@ export function SkillsOverlay() {
     <div className="skills-overlay">
       <div className="skills-title">Skills</div>
       <div className="skills-grid">
-        {allSkills.map(({ skill }, i) => (
+        {allSkills.map(({ name, icon }, i) => (
           <div
-            key={skill}
+            key={name}
             className="skill-card"
             style={{ animationDelay: `${i * 0.08}s` }}
           >
-            <img
-              className="skill-img"
-              src={createPlaceholderImage("#00ff88", skill[0].toUpperCase())}
-              alt={skill}
-            />
-            <span className="skill-name">{skill}</span>
+            <i className={`${icon} skill-icon`}></i>
+            <span className="skill-name">{name}</span>
           </div>
         ))}
       </div>

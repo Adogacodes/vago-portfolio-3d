@@ -15,28 +15,43 @@ export const summary = `
 export const skillCategories = [
   {
     name: "Frontend",
-    color: "#00ffff",
-    skills: ["HTML", "CSS", "JavaScript", "React", "Typescript"]
+    color: "#00ff88",
+    skills: [
+      { name: "HTML", icon: "devicon-html5-plain" },
+      { name: "CSS", icon: "devicon-css3-plain" },
+      { name: "JavaScript", icon: "devicon-javascript-plain" },
+      { name: "React", icon: "devicon-react-original" },
+      { name: "TypeScript", icon: "devicon-typescript-plain" }
+    ]
   },
   {
     name: "Backend",
     color: "#ff88cc",
-    skills: ["Node.js", "Express"]  // TODO: update with your real backend skills
+    skills: [
+      { name: "Node.js", icon: "devicon-nodejs-plain" },
+      { name: "Express", icon: "devicon-express-original" }
+    ]
   },
   {
     name: "Database",
     color: "#ffaa00",
-    skills: ["MongoDB"] // TODO: update with your real database skills
+    skills: [
+      { name: "MongoDB", icon: "devicon-mongodb-plain" }
+    ]
   },
   {
     name: "Tools",
     color: "#00ff88",
-    skills: ["Git", "Github"] // TODO: update with your real tools
+    skills: [
+      { name: "Git", icon: "devicon-git-plain" },
+      { name: "Github", icon: "devicon-git-plain" },
+      
+    ]
   }
 ]
 
-// keep this for anything that still imports skills as a flat array
-export const skills = skillCategories.flatMap(c => c.skills)
+export const skills = skillCategories.flatMap(c => c.skills.map(s => s.name))
+
 
 export const projects = [
   {

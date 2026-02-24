@@ -118,12 +118,17 @@
   letter-spacing: 2.5px;
 }
 
-.skill-img {
-  width: 46px;
-  height: 46px;
-  object-fit: contain;
+.skill-icon {
+  font-size: 36px;
+  color: #00ff88;
   transition: all 0.4s ease;
   filter: brightness(0.85);
+}
+
+.skill-card:hover .skill-icon {
+  color: #00ff88;
+  filter: brightness(1.4) drop-shadow(0 0 8px rgba(0, 255, 136, 0.9));
+  transform: scale(1.2) translateY(-3px);
 }
 
 .skill-name {

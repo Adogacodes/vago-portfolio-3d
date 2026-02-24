@@ -33,28 +33,28 @@ export default function SummaryScene() {
 
   const circleTexture = useMemo(() => createCircleTexture(), [])
 
-  const backgroundParticles = useMemo(() => {
-  const count = 400
-  const positions = new Float32Array(count * 3)
-  const colors = new Float32Array(count * 3)
+//   const backgroundParticles = useMemo(() => {
+//   const count = 400
+//   const positions = new Float32Array(count * 3)
+//   const colors = new Float32Array(count * 3)
 
-  for (let i = 0; i < count; i++) {
-    const angle = Math.random() * Math.PI * 2
-    const radius = 4 + Math.random() * 8
-    const spread = (Math.random() - 0.5) * 8
+//   for (let i = 0; i < count; i++) {
+//     const angle = Math.random() * Math.PI * 2
+//     const radius = 4 + Math.random() * 8
+//     const spread = (Math.random() - 0.5) * 8
 
-    positions[i * 3] = Math.cos(angle) * radius
-    positions[i * 3 + 1] = spread
-    positions[i * 3 + 2] = Math.sin(angle) * radius
+//     positions[i * 3] = Math.cos(angle) * radius
+//     positions[i * 3 + 1] = spread
+//     positions[i * 3 + 2] = Math.sin(angle) * radius
 
-    // gold tones to match summary scene
-    colors[i * 3] = 0.9 + Math.random() * 0.1
-    colors[i * 3 + 1] = 0.6 + Math.random() * 0.3
-    colors[i * 3 + 2] = Math.random() * 0.2
-  }
+//     // gold tones to match summary scene
+//     colors[i * 3] = 0.9 + Math.random() * 0.1
+//     colors[i * 3 + 1] = 0.6 + Math.random() * 0.3
+//     colors[i * 3 + 2] = Math.random() * 0.2
+//   }
 
-  return { positions, colors }
-}, [])
+//   return { positions, colors }
+// }, [])
 
   // helix particles
   const helix = useMemo(() => {
@@ -109,18 +109,20 @@ export default function SummaryScene() {
   useEffect(() => {
   if (!groupRef.current || !helixRef.current || !particlesRef.current) return
 
-  // set BEFORE first render using layout timing
+  // all three start below
   gsap.set(groupRef.current.position, { y: -8 })
   gsap.set(helixRef.current.position, { y: -8 })
-  gsap.set(particlesRef.current.scale, { x: 0, y: 0, z: 0 })
+  gsap.set(particlesRef.current.position, { y: -8 })
 
-  gsap.to(particlesRef.current.scale, {
-    x: 1, y: 1, z: 1,
+  // particles spring up first
+  gsap.to(particlesRef.current.position, {
+    y: 0,
     duration: 1.4,
     ease: "elastic.out(1, 0.6)",
     delay: 0.1
   })
 
+  // helix springs up second
   gsap.to(helixRef.current.position, {
     y: 0,
     duration: 1.4,
@@ -128,6 +130,7 @@ export default function SummaryScene() {
     delay: 0.2
   })
 
+  // text springs up last
   gsap.to(groupRef.current.position, {
     y: 0,
     duration: 1.4,
@@ -137,7 +140,7 @@ export default function SummaryScene() {
 }, [])
 
 
- useFrame(({ clock }) => {
+useFrame(({ clock }) => {
   const t = clock.getElapsedTime()
 
   if (helixRef.current) {
@@ -147,7 +150,6 @@ export default function SummaryScene() {
   if (ringRef.current) {
     ringRef.current.rotation.z = t * 0.3
     ringRef.current.rotation.x = Math.sin(t * 0.2) * 0.3
-    // dont use setScalar on rings — let them animate freely
     const pulse = 1 + Math.sin(t * 1.2) * 0.03
     ringRef.current.scale.x = pulse
     ringRef.current.scale.z = pulse
@@ -161,8 +163,7 @@ export default function SummaryScene() {
     ring2Ref.current.scale.z = pulse2
   }
 
-  // only rotate particles AFTER gsap scale animation is done
-  if (particlesRef.current && particlesRef.current.scale.x > 0.95) {
+  if (particlesRef.current) {
     particlesRef.current.rotation.y = t * 0.06
     particlesRef.current.rotation.x = Math.sin(t * 0.04) * 0.15
   }
