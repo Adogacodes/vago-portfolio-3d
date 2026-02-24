@@ -48,6 +48,10 @@
   display: none;
 }
 
+.project-bottom {
+  display: none;
+}
+
 .desktop-arrow {
   display: flex;
 }
@@ -407,6 +411,7 @@
   }
 
   .project-bottom {
+    display: flex;
     margin-top: 12px;
     gap: 12px;
   }
