@@ -10,7 +10,6 @@ import TransitionManager from "./components/TransitionManager"
 import useScrollSection from "./hooks/useScrollSection"
 import SpaceshipCursor from "./components/SpaceshipCursor"
 import useDeviceDetect from "./hooks/useDeviceDetect"
-import { Canvas } from "@react-three/fiber"
 
 const SECTION_COLORS = [
   "#00ffff",
