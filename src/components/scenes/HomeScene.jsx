@@ -4,6 +4,7 @@ import { Text, Stars } from "@react-three/drei"
 import { personalInfo } from "../../constants/data"
 import * as THREE from "three"
 import { gsap } from "gsap"
+import useDeviceDetect from "../../hooks/useDeviceDetect"
 
 function createCircleTexture() {
   const canvas = document.createElement("canvas")
@@ -28,11 +29,17 @@ export default function HomeScene() {
   const ring2Ref = useRef()
   const coreRef = useRef()
   const sceneRef = useRef()
+  const { isMobile, isTablet } = useDeviceDetect()
 
   const circleTexture = useMemo(() => createCircleTexture(), [])
 
+  // responsive values
+ const nameFontSize = isMobile ? 0.38 : isTablet ? 0.68 : 0.75
+const titleFontSize = isMobile ? 0.19 : isTablet ? 0.21 : 0.22
+const ringScale = isMobile ? 0.85 : isTablet ? 0.92 : 1
+
   const particles = useMemo(() => {
-    const count = 400
+    const count = isMobile ? 400 : 400
     const positions = new Float32Array(count * 3)
     const colors = new Float32Array(count * 3)
 
@@ -51,10 +58,10 @@ export default function HomeScene() {
     }
 
     return { positions, colors }
-  }, [])
+  }, [isMobile])
 
   const orbs = useMemo(() => {
-    const count = 40
+    const count = isMobile ? 20 : 40
     const positions = new Float32Array(count * 3)
     for (let i = 0; i < count; i++) {
       positions[i * 3] = (Math.random() - 0.5) * 14
@@ -62,17 +69,15 @@ export default function HomeScene() {
       positions[i * 3 + 2] = -2 + (Math.random() - 0.5) * 3
     }
     return positions
-  }, [])
+  }, [isMobile])
 
-  // intro animation on mount
+  // intro animation
   useEffect(() => {
     if (!sceneRef.current) return
 
-    // start everything at scale 0
     sceneRef.current.scale.set(0, 0, 0)
     groupRef.current.scale.set(0, 0, 0)
 
-    // expand the whole scene outward
     gsap.to(sceneRef.current.scale, {
       x: 1, y: 1, z: 1,
       duration: 1.2,
@@ -80,7 +85,6 @@ export default function HomeScene() {
       delay: 0.1
     })
 
-    // text fades in slightly after
     gsap.to(groupRef.current.scale, {
       x: 1, y: 1, z: 1,
       duration: 1,
@@ -100,13 +104,13 @@ export default function HomeScene() {
     if (ringRef.current) {
       ringRef.current.rotation.z = t * 0.4
       ringRef.current.rotation.x = Math.sin(t * 0.3) * 0.3
-      ringRef.current.scale.setScalar(1 + Math.sin(t * 1.5) * 0.04)
+      ringRef.current.scale.setScalar(ringScale + Math.sin(t * 1.5) * 0.04)
     }
 
     if (ring2Ref.current) {
       ring2Ref.current.rotation.z = -t * 0.25
       ring2Ref.current.rotation.y = t * 0.2
-      ring2Ref.current.scale.setScalar(1 + Math.sin(t * 1.5 + 1) * 0.04)
+      ring2Ref.current.scale.setScalar(ringScale + Math.sin(t * 1.5 + 1) * 0.04)
     }
 
     if (groupRef.current) {
@@ -119,17 +123,14 @@ export default function HomeScene() {
       <Stars
         radius={100}
         depth={50}
-        count={4000}
+        count={isMobile ? 2000 : 4000}
         factor={4}
         saturation={0.5}
         fade
         speed={0.5}
       />
 
-      {/* Everything that expands on intro */}
       <group ref={sceneRef}>
-
-        {/* Galaxy particles */}
         <points ref={particlesRef}>
           <bufferGeometry>
             <bufferAttribute
@@ -153,7 +154,6 @@ export default function HomeScene() {
           />
         </points>
 
-        {/* Ambient orbs */}
         <points>
           <bufferGeometry>
             <bufferAttribute
@@ -173,7 +173,6 @@ export default function HomeScene() {
           />
         </points>
 
-        {/* Inner ring */}
         <mesh ref={ringRef}>
           <torusGeometry args={[1.4, 0.006, 16, 120]} />
           <meshStandardMaterial
@@ -185,7 +184,6 @@ export default function HomeScene() {
           />
         </mesh>
 
-        {/* Outer ring */}
         <mesh ref={ring2Ref}>
           <torusGeometry args={[1.8, 0.003, 16, 120]} />
           <meshStandardMaterial
@@ -197,7 +195,6 @@ export default function HomeScene() {
           />
         </mesh>
 
-        {/* Core glow */}
         <mesh ref={coreRef}>
           <sphereGeometry args={[0.15, 32, 32]} />
           <meshStandardMaterial
@@ -208,14 +205,12 @@ export default function HomeScene() {
             opacity={0.5}
           />
         </mesh>
-
       </group>
 
-      {/* Name and title */}
       <group ref={groupRef}>
         <Text
-          position={[0, 0.5, 0]}
-          fontSize={0.75}
+          position={[0, isMobile ? 0.3 : 0.5, 0]}
+          fontSize={nameFontSize}
           color="#ffffff"
           anchorX="center"
           anchorY="middle"
@@ -227,8 +222,8 @@ export default function HomeScene() {
         </Text>
 
         <Text
-          position={[0, -0.2, 0]}
-          fontSize={0.22}
+          position={[0, isMobile ? -0.1 : -0.2, 0]}
+          fontSize={titleFontSize}
           color="#ffffffaa"
           anchorX="center"
           anchorY="middle"

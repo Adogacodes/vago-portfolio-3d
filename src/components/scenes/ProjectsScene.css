@@ -10,6 +10,7 @@
   justify-content: center;
   pointer-events: none;
   z-index: 5;
+  padding: 20px;
 }
 
 .projects-title {
@@ -30,6 +31,8 @@
   align-items: center;
   gap: 32px;
   pointer-events: all;
+  width: 100%;
+  justify-content: center;
 }
 
 .project-card {
@@ -259,5 +262,161 @@
       0 0 20px rgba(255, 68, 170, 1),
       0 0 60px rgba(255, 68, 170, 0.6),
       0 0 100px rgba(255, 68, 170, 0.3);
+  }
+}
+
+/* Tablet landscape */
+@media (max-width: 1024px) {
+  .projects-title {
+    font-size: 26px;
+    letter-spacing: 8px;
+    margin-bottom: 24px;
+  }
+
+  .project-card {
+    width: 400px;
+  }
+
+  .project-image-container {
+    height: 170px;
+  }
+
+  .project-content {
+    padding: 18px;
+    gap: 10px;
+  }
+
+  .project-title {
+    font-size: 18px;
+  }
+
+  .nav-arrow {
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+  }
+
+  .projects-card-wrapper {
+    gap: 20px;
+  }
+}
+
+/* Tablet portrait */
+@media (max-width: 768px) {
+  .projects-title {
+    font-size: 24px;
+    letter-spacing: 6px;
+    margin-bottom: 20px;
+  }
+
+  .project-card {
+    width: 340px;
+  }
+
+  .project-image-container {
+    height: 150px;
+  }
+
+  .project-content {
+    padding: 16px;
+    gap: 8px;
+  }
+
+  .project-title {
+    font-size: 18px;
+    letter-spacing: 1px;
+  }
+
+  .project-description {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .nav-arrow {
+    width: 42px;
+    height: 42px;
+    font-size: 18px;
+  }
+
+  .projects-card-wrapper {
+    gap: 12px;
+  }
+
+  .project-link {
+    padding: 7px 14px;
+    font-size: 11px;
+  }
+}
+
+/* Mobile portrait */
+@media (max-width: 576px) {
+  .projects-overlay {
+    padding: 60px 12px 60px;
+    justify-content: center;
+  }
+
+  .projects-title {
+    font-size: 20px;
+    letter-spacing: 4px;
+    margin-bottom: 16px;
+  }
+
+  .projects-card-wrapper {
+    gap: 8px;
+    width: 100%;
+  }
+
+  .project-card {
+    width: calc(100vw - 100px);
+  }
+
+  .project-image-container {
+    height: 140px;
+  }
+
+  .project-content {
+    padding: 14px;
+    gap: 8px;
+  }
+
+  .project-title {
+    font-size: 16px;
+    letter-spacing: 1px;
+  }
+
+  .project-description {
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  .project-links {
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .project-link {
+    padding: 7px 14px;
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+
+  .project-counter {
+    font-size: 11px;
+  }
+
+  .nav-arrow {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  .project-dots {
+    margin-top: 12px;
+  }
+
+  .project-dot {
+    width: 7px;
+    height: 7px;
   }
 }

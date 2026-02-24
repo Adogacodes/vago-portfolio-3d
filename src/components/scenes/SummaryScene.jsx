@@ -4,6 +4,7 @@ import { Text, Stars } from "@react-three/drei"
 import { summary } from "../../constants/data"
 import * as THREE from "three"
 import { gsap } from "gsap"
+import useDeviceDetect from "../../hooks/useDeviceDetect"
 
 function createCircleTexture() {
   const canvas = document.createElement("canvas")
@@ -24,67 +25,47 @@ function createCircleTexture() {
 export default function SummaryScene() {
   const groupRef = useRef()
   const helixRef = useRef()
-  const hasAnimated = useRef(false)
   const ringRef = useRef()
   const ring2Ref = useRef()
   const titleRef = useRef()
   const textRef = useRef()
   const particlesRef = useRef()
+  const { isMobile, isTablet } = useDeviceDetect()
 
   const circleTexture = useMemo(() => createCircleTexture(), [])
 
-//   const backgroundParticles = useMemo(() => {
-//   const count = 400
-//   const positions = new Float32Array(count * 3)
-//   const colors = new Float32Array(count * 3)
+  // responsive values
+  const titleFontSize = isMobile ? 0.22 : isTablet ? 0.32 : 0.4
+  const textFontSize = isMobile ? 0.16 : isTablet ? 0.15 : 0.2
+  const textMaxWidth = isMobile ? 3 : isTablet ? 5.5 : 7
+  const titleY = isMobile ? 0.65 : isTablet ? 0.8 : 0.7
+  const textY = isMobile ? -0.3 : isTablet ? -0.25 : -0.35
+  const lineHeight = isMobile ? 1.5 : isTablet ? 1.6 : 1.7
+  const helixRadius = isMobile ? 1.5 : isTablet ? 2 : 2.5
 
-//   for (let i = 0; i < count; i++) {
-//     const angle = Math.random() * Math.PI * 2
-//     const radius = 4 + Math.random() * 8
-//     const spread = (Math.random() - 0.5) * 8
-
-//     positions[i * 3] = Math.cos(angle) * radius
-//     positions[i * 3 + 1] = spread
-//     positions[i * 3 + 2] = Math.sin(angle) * radius
-
-//     // gold tones to match summary scene
-//     colors[i * 3] = 0.9 + Math.random() * 0.1
-//     colors[i * 3 + 1] = 0.6 + Math.random() * 0.3
-//     colors[i * 3 + 2] = Math.random() * 0.2
-//   }
-
-//   return { positions, colors }
-// }, [])
-
-  // helix particles
   const helix = useMemo(() => {
-    const count = 600
+    const count = isMobile ? 300 : 600
     const positions = new Float32Array(count * 3)
     const colors = new Float32Array(count * 3)
 
     for (let i = 0; i < count; i++) {
       const t = (i / count) * Math.PI * 8
-      const radius = 2.5
-
-      // two strands of the helix
       const strand = i % 2 === 0 ? 0 : Math.PI
 
-      positions[i * 3] = Math.cos(t + strand) * radius
+      positions[i * 3] = Math.cos(t + strand) * helixRadius
       positions[i * 3 + 1] = (i / count) * 6 - 3
-      positions[i * 3 + 2] = Math.sin(t + strand) * radius
+      positions[i * 3 + 2] = Math.sin(t + strand) * helixRadius
 
-      // gold to orange gradient
       colors[i * 3] = 0.9 + Math.random() * 0.1
       colors[i * 3 + 1] = 0.5 + Math.random() * 0.4
       colors[i * 3 + 2] = 0
     }
 
     return { positions, colors }
-  }, [])
+  }, [isMobile, helixRadius])
 
-  // background particles
   const particles = useMemo(() => {
-    const count = 400
+    const count = isMobile ? 400 : 400
     const positions = new Float32Array(count * 3)
     const colors = new Float32Array(count * 3)
 
@@ -103,85 +84,77 @@ export default function SummaryScene() {
     }
 
     return { positions, colors }
+  }, [isMobile])
+
+  useEffect(() => {
+    if (!groupRef.current || !helixRef.current || !particlesRef.current) return
+
+    gsap.set(groupRef.current.position, { y: -8 })
+    gsap.set(helixRef.current.position, { y: -8 })
+    gsap.set(particlesRef.current.position, { y: -8 })
+
+    gsap.to(particlesRef.current.position, {
+      y: 0,
+      duration: 1.4,
+      ease: "elastic.out(1, 0.6)",
+      delay: 0.1
+    })
+
+    gsap.to(helixRef.current.position, {
+      y: 0,
+      duration: 1.4,
+      ease: "elastic.out(1, 0.6)",
+      delay: 0.2
+    })
+
+    gsap.to(groupRef.current.position, {
+      y: 0,
+      duration: 1.4,
+      ease: "elastic.out(1, 0.6)",
+      delay: 0.3
+    })
   }, [])
 
-  // intro animation
-  useEffect(() => {
-  if (!groupRef.current || !helixRef.current || !particlesRef.current) return
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime()
 
-  // all three start below
-  gsap.set(groupRef.current.position, { y: -8 })
-  gsap.set(helixRef.current.position, { y: -8 })
-  gsap.set(particlesRef.current.position, { y: -8 })
+    if (helixRef.current) {
+      helixRef.current.rotation.y = t * 0.2
+    }
 
-  // particles spring up first
-  gsap.to(particlesRef.current.position, {
-    y: 0,
-    duration: 1.4,
-    ease: "elastic.out(1, 0.6)",
-    delay: 0.1
+    if (ringRef.current) {
+      ringRef.current.rotation.z = t * 0.3
+      ringRef.current.rotation.x = Math.sin(t * 0.2) * 0.3
+      const pulse = 1 + Math.sin(t * 1.2) * 0.03
+      ringRef.current.scale.x = pulse
+      ringRef.current.scale.z = pulse
+    }
+
+    if (ring2Ref.current) {
+      ring2Ref.current.rotation.z = -t * 0.2
+      ring2Ref.current.rotation.y = t * 0.15
+      const pulse2 = 1 + Math.sin(t * 1.2 + 1) * 0.03
+      ring2Ref.current.scale.x = pulse2
+      ring2Ref.current.scale.z = pulse2
+    }
+
+    if (particlesRef.current) {
+      particlesRef.current.rotation.y = t * 0.06
+      particlesRef.current.rotation.x = Math.sin(t * 0.04) * 0.15
+    }
   })
-
-  // helix springs up second
-  gsap.to(helixRef.current.position, {
-    y: 0,
-    duration: 1.4,
-    ease: "elastic.out(1, 0.6)",
-    delay: 0.2
-  })
-
-  // text springs up last
-  gsap.to(groupRef.current.position, {
-    y: 0,
-    duration: 1.4,
-    ease: "elastic.out(1, 0.6)",
-    delay: 0.3
-  })
-}, [])
-
-
-useFrame(({ clock }) => {
-  const t = clock.getElapsedTime()
-
-  if (helixRef.current) {
-    helixRef.current.rotation.y = t * 0.2
-  }
-
-  if (ringRef.current) {
-    ringRef.current.rotation.z = t * 0.3
-    ringRef.current.rotation.x = Math.sin(t * 0.2) * 0.3
-    const pulse = 1 + Math.sin(t * 1.2) * 0.03
-    ringRef.current.scale.x = pulse
-    ringRef.current.scale.z = pulse
-  }
-
-  if (ring2Ref.current) {
-    ring2Ref.current.rotation.z = -t * 0.2
-    ring2Ref.current.rotation.y = t * 0.15
-    const pulse2 = 1 + Math.sin(t * 1.2 + 1) * 0.03
-    ring2Ref.current.scale.x = pulse2
-    ring2Ref.current.scale.z = pulse2
-  }
-
-  if (particlesRef.current) {
-    particlesRef.current.rotation.y = t * 0.06
-    particlesRef.current.rotation.x = Math.sin(t * 0.04) * 0.15
-  }
-})
 
   return (
     <>
       <Stars
         radius={100}
         depth={50}
-        count={4000}
+        count={isMobile ? 2000 : 4000}
         factor={4}
         saturation={0.5}
         fade
         speed={0.5}
       />
-
-      
 
       {/* Background particles */}
       <points ref={particlesRef}>
@@ -231,32 +204,36 @@ useFrame(({ clock }) => {
         />
       </points>
 
-      {/* Rings */}
-      <mesh ref={ringRef}>
-        <torusGeometry args={[1.4, 0.006, 16, 120]} />
-        <meshStandardMaterial
-          color="#ffaa00"
-          emissive="#ffaa00"
-          emissiveIntensity={1.5}
-          transparent
-          opacity={0.5}
-        />
-      </mesh>
+      {/* Rings — hidden on mobile to reduce clutter */}
+      {!isMobile && (
+        <>
+          <mesh ref={ringRef}>
+            <torusGeometry args={[1.4, 0.006, 16, 120]} />
+            <meshStandardMaterial
+              color="#ffaa00"
+              emissive="#ffaa00"
+              emissiveIntensity={1.5}
+              transparent
+              opacity={0.5}
+            />
+          </mesh>
 
-      <mesh ref={ring2Ref}>
-        <torusGeometry args={[1.8, 0.003, 16, 120]} />
-        <meshStandardMaterial
-          color="#ff6600"
-          emissive="#ff6600"
-          emissiveIntensity={1.5}
-          transparent
-          opacity={0.3}
-        />
-      </mesh>
+          <mesh ref={ring2Ref}>
+            <torusGeometry args={[1.8, 0.003, 16, 120]} />
+            <meshStandardMaterial
+              color="#ff6600"
+              emissive="#ff6600"
+              emissiveIntensity={1.5}
+              transparent
+              opacity={0.3}
+            />
+          </mesh>
+        </>
+      )}
 
       {/* Core glow */}
       <mesh>
-        <sphereGeometry args={[0.15, 32, 32]} />
+        <sphereGeometry args={[isMobile ? 0.1 : 0.15, 32, 32]} />
         <meshStandardMaterial
           color="#ffaa00"
           emissive="#ffaa00"
@@ -266,12 +243,12 @@ useFrame(({ clock }) => {
         />
       </mesh>
 
-      {/* Text group flies in */}
+      {/* Text group */}
       <group ref={groupRef}>
         <Text
           ref={titleRef}
-          position={[0, 0.7, 0]}
-          fontSize={0.4}
+          position={[0, titleY, 0]}
+          fontSize={titleFontSize}
           color="#ffaa00"
           anchorX="center"
           anchorY="middle"
@@ -284,14 +261,14 @@ useFrame(({ clock }) => {
 
         <Text
           ref={textRef}
-          position={[0, -0.35, 0]}
-          fontSize={0.2}
+          position={[0, textY, 0]}
+          fontSize={textFontSize}
           color="#ffffffcc"
           anchorX="center"
           anchorY="middle"
           letterSpacing={0.06}
-          lineHeight={1.7}
-          maxWidth={7}
+          lineHeight={lineHeight}
+          maxWidth={textMaxWidth}
           textAlign="center"
           outlineWidth={0.005}
           outlineColor="#ffaa0066"

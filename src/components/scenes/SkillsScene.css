@@ -10,6 +10,7 @@
   justify-content: center;
   pointer-events: none;
   z-index: 5;
+  padding: 20px;
 }
 
 .skills-title {
@@ -107,7 +108,7 @@
   );
 }
 
-.skill-card:hover .skill-img {
+.skill-card:hover .skill-icon {
   filter: brightness(1.4) drop-shadow(0 0 10px rgba(0, 255, 136, 0.9));
   transform: scale(1.2) translateY(-3px);
 }
@@ -123,12 +124,6 @@
   color: #00ff88;
   transition: all 0.4s ease;
   filter: brightness(0.85);
-}
-
-.skill-card:hover .skill-icon {
-  color: #00ff88;
-  filter: brightness(1.4) drop-shadow(0 0 8px rgba(0, 255, 136, 0.9));
-  transform: scale(1.2) translateY(-3px);
 }
 
 .skill-name {
@@ -173,5 +168,100 @@
       0 0 20px rgba(0, 255, 136, 1),
       0 0 60px rgba(0, 255, 136, 0.6),
       0 0 100px rgba(0, 255, 136, 0.3);
+  }
+}
+
+/* Tablet landscape */
+@media (max-width: 1024px) {
+  .skills-title {
+    font-size: 26px;
+    letter-spacing: 8px;
+    margin-bottom: 24px;
+  }
+
+  .skills-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    padding: 0 16px;
+  }
+
+  .skill-card {
+    width: 95px;
+    height: 105px;
+  }
+
+  .skill-icon {
+    font-size: 30px;
+  }
+}
+
+/* Tablet portrait */
+@media (max-width: 768px) {
+  .skills-title {
+    font-size: 24px;
+    letter-spacing: 6px;
+    margin-bottom: 20px;
+  }
+
+  .skills-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 0 12px;
+  }
+
+  .skill-card {
+    width: 90px;
+    height: 100px;
+    border-radius: 12px;
+  }
+
+  .skill-icon {
+    font-size: 30px;
+  }
+
+  .skill-name {
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+}
+
+/* Mobile portrait */
+@media (max-width: 576px) {
+  .skills-overlay {
+    justify-content: center;
+    padding: 60px 8px 60px;
+  }
+
+  .skills-title {
+    font-size: 20px;
+    letter-spacing: 4px;
+    margin-bottom: 16px;
+  }
+
+  .skills-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding: 0 8px;
+  }
+
+  .skill-card {
+    width: 85px;
+    height: 95px;
+    border-radius: 10px;
+    gap: 6px;
+    padding: 8px;
+  }
+
+  .skill-icon {
+    font-size: 28px;
+  }
+
+  .skill-name {
+    font-size: 9px;
+    letter-spacing: 0.5px;
+  }
+
+  .skill-card:hover {
+    transform: translateY(-6px) scale(1.05);
   }
 }
