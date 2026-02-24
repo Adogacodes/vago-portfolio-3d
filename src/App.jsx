@@ -10,6 +10,7 @@ import TransitionManager from "./components/TransitionManager"
 import useScrollSection from "./hooks/useScrollSection"
 import SpaceshipCursor from "./components/SpaceshipCursor"
 import useDeviceDetect from "./hooks/useDeviceDetect"
+import { Canvas } from "@react-three/fiber"
 
 const SECTION_COLORS = [
   "#00ffff",
@@ -51,11 +52,20 @@ export default function App() {
 
       {/* 3D Canvas */}
      <Canvas
-        camera={{ position: [0, 0, 5], fov: 75 }}
-        gl={{ antialias: true, alpha: false }}
-        style={{ background: "#000000" }}
-        onTouchStart={(e) => e.stopPropagation()}
-      >
+  camera={{ position: [0, 0, 5], fov: 75 }}
+  dpr={[1, 1.5]}
+  gl={{ 
+    antialias: true, 
+    alpha: false,
+    powerPreference: "high-performance",
+    failIfMajorPerformanceCaveat: false
+  }}
+  style={{ background: "#000000" }}
+  onCreated={({ gl }) => {
+    if (!gl) setWebGLFailed(true)
+  }}
+  onError={() => setWebGLFailed(true)}
+>
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
 
