@@ -1,8 +1,8 @@
 export const personalInfo = {
   name: "Isaac Adoga",  // TODO: Replace with your full name
   title: "Full Stack Developer", // TODO: Replace with your title
-  email: "vagotech0@email.com", // TODO: Replace with your real email
-  github: "https://github.com/vago", // TODO: Replace with your GitHub URL
+  email: "vagotech0@gmail.com", // TODO: Replace with your real email
+  github: "https://github.com/Adogacodes", // TODO: Replace with your GitHub URL
   resume: "/resume.pdf", // TODO: Add your real resume PDF to the public folder
 }
 
