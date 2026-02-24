@@ -7,8 +7,8 @@ export default function useScrollSection() {
   const [previousSection, setPreviousSection] = useState(0)
   const isThrottled = useRef(false)
   const currentSectionRef = useRef(0)
+  const touchStartY = useRef(null)
 
-  // keep ref in sync with state
   useEffect(() => {
     currentSectionRef.current = currentSection
   }, [currentSection])
@@ -51,12 +51,33 @@ export default function useScrollSection() {
       else goToPrev()
     }
 
+    const handleTouchStart = (e) => {
+      touchStartY.current = e.touches[0].clientY
+    }
+
+    const handleTouchEnd = (e) => {
+      if (touchStartY.current === null) return
+      const delta = touchStartY.current - e.changedTouches[0].clientY
+
+      // minimum swipe distance of 50px
+      if (Math.abs(delta) < 50) return
+
+      if (delta > 0) goToNext()
+      else goToPrev()
+
+      touchStartY.current = null
+    }
+
     window.addEventListener("keydown", handleKeyDown)
     window.addEventListener("wheel", handleScroll)
+    window.addEventListener("touchstart", handleTouchStart)
+    window.addEventListener("touchend", handleTouchEnd)
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown)
       window.removeEventListener("wheel", handleScroll)
+      window.removeEventListener("touchstart", handleTouchStart)
+      window.removeEventListener("touchend", handleTouchEnd)
     }
   }, [goToNext, goToPrev])
 

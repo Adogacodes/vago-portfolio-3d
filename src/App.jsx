@@ -9,6 +9,7 @@ import ProjectsScene, { ProjectsOverlay } from "./components/scenes/ProjectsScen
 import TransitionManager from "./components/TransitionManager"
 import useScrollSection from "./hooks/useScrollSection"
 import SpaceshipCursor from "./components/SpaceshipCursor"
+import useDeviceDetect from "./hooks/useDeviceDetect"
 
 const SECTION_COLORS = [
   "#00ffff",
@@ -20,6 +21,8 @@ const SECTION_COLORS = [
 export default function App() {
   const { currentSection, previousSection, goToSection } = useScrollSection()
   const [visibleSection, setVisibleSection] = useState(0)
+
+  const { isMobile, isTablet, isTouch } = useDeviceDetect()
 
   const accentColor = SECTION_COLORS[visibleSection]
 
@@ -43,7 +46,8 @@ export default function App() {
       />
 
       {/* Spaceship cursor */}
-      <SpaceshipCursor accentColor={accentColor} />
+      {/* Spaceship cursor — hidden on touch devices */}
+      {!isMobile && !isTablet && <SpaceshipCursor accentColor={accentColor} />}
 
       {/* 3D Canvas */}
       <Canvas camera={{ position: [0, 0, 5], fov: 75 }}>

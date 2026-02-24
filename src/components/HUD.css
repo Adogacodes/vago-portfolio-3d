@@ -85,3 +85,93 @@
   0%, 100% { opacity: 0.4; }
   50% { opacity: 1; }
 }
+
+/* Tablet landscape */
+@media (max-width: 1024px) {
+  .hud-top-left {
+    top: 16px;
+    left: 20px;
+  }
+
+  .hud-name {
+    font-size: 16px;
+  }
+
+  .hud-title {
+    font-size: 10px;
+  }
+
+  .hud-top-right {
+    top: 16px;
+    right: 20px;
+    gap: 16px;
+  }
+
+  .hud-link {
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+}
+
+/* Tablet portrait */
+@media (max-width: 768px) {
+  .hud-top-left {
+    top: 12px;
+    left: 16px;
+  }
+
+  .hud-name {
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
+
+  .hud-title {
+    display: none;
+  }
+
+  .hud-top-right {
+    top: 12px;
+    right: 16px;
+    gap: 8px;
+  }
+
+  .hud-link {
+    font-size: 10px;
+    padding: 4px 8px;
+    letter-spacing: 0.5px;
+  }
+
+  .hud-hint {
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+}
+
+/* Mobile portrait */
+@media (max-width: 576px) {
+  .hud-top-left {
+    top: 10px;
+    left: 12px;
+  }
+
+  .hud-name {
+    font-size: 12px;
+    letter-spacing: 0.5px;
+  }
+
+  .hud-top-right {
+    top: 10px;
+    right: 12px;
+    gap: 4px;
+  }
+
+  .hud-link {
+    font-size: 9px;
+    padding: 3px 6px;
+  }
+
+  .hud-hint {
+    font-size: 9px;
+    bottom: 16px;
+  }
+}

@@ -26,13 +26,14 @@ export default function HUD({ accentColor }) {
         </a>
       </div>
 
-      {/* Bottom center - navigation hint */}
-      <div className="hud-bottom-center">
-        <span className="hud-hint" style={{ color: accentColor }}>
-          ↓ scroll or press ↓ to navigate
-        </span>
-      </div>
-
+     {/* Bottom center - navigation hint */}
+<div className="hud-bottom-center">
+  <span className="hud-hint">
+    {typeof window !== "undefined" && window.innerWidth < 1024
+      ? "↑ swipe up to navigate ↓"
+      : "↓ scroll or press ↓ to navigate"}
+  </span>
+</div>
     </div>
   )
 }

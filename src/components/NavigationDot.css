@@ -39,3 +39,25 @@
 .nav-dot.active {
   transform: scale(1.3);
 }
+
+/* Tablet and mobile — move dots to bottom center */
+/* Tablet and mobile — keep vertical but smaller on right side */
+@media (max-width: 1024px) {
+  .nav-dots-container {
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .nav-dot-wrapper {
+    width: 24px;
+    height: 24px;
+  }
+
+  .nav-dot {
+    width: 8px;
+    height: 8px;
+  }
+}
