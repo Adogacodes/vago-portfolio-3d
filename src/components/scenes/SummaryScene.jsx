@@ -38,8 +38,8 @@ export default function SummaryScene() {
   const titleFontSize = isMobile ? 0.20 : isTablet ? 0.32 : 0.4
   const textFontSize = isMobile ? 0.14 : isTablet ? 0.15 : 0.2
   const textMaxWidth = isMobile ? 3 : isTablet ? 5.5 : 7
-  const titleY = isMobile ? 0.7 : isTablet ? 0.8 : 0.7
-  const textY = isMobile ? -0.1 : isTablet ? -0.25 : -0.35
+  const titleY = isMobile ? 0.9 : isTablet ? 0.8 : 0.7
+  const textY = isMobile ? 0.1 : isTablet ? -0.25 : -0.35
   const lineHeight = isMobile ? 1.5 : isTablet ? 1.6 : 1.7
   const helixRadius = isMobile ? 1.5 : isTablet ? 2 : 2.5
 
