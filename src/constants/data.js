@@ -1,3 +1,8 @@
+import project1 from "../assets/project1.png"
+import project2 from "../assets/project2.png"
+import project3 from "../assets/project3.png"
+import project4 from "../assets/project4.png"
+
 export const personalInfo = {
   name: "Isaac Adoga",  // TODO: Replace with your full name
   title: "Full Stack Developer", // TODO: Replace with your title
@@ -77,5 +82,13 @@ export const projects = [
     github: "https://github.com/vago/project-three", // TODO: Real link
     live: "https://project-three.com", // TODO: Real link
     image: "/project3.png" // TODO: Add real screenshot to public folder
+  },
+  {
+    id: 3,
+    title: "Project Four",
+    description: "Yet another great project.", // TODO: Real description
+    github: "https://github.com/vago/project-three", // TODO: Real link
+    live: "https://project-three.com", // TODO: Real link
+    image: "/project4.png" // TODO: Add real screenshot to public folder
   },
 ]

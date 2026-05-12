@@ -298,6 +298,7 @@ function NeonParticles() {
 export function ProjectsOverlay() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [animKey, setAnimKey] = useState(0)
+  const [imageLoaded, setImageLoaded] = useState(false)  // ← new
 
   const placeholders = useMemo(() =>
     projects.map((_, i) => createProjectPlaceholder(i)), []
@@ -307,6 +308,7 @@ export function ProjectsOverlay() {
     if (index < 0 || index >= projects.length) return
     setActiveIndex(index)
     setAnimKey(prev => prev + 1)
+    setImageLoaded(false)  // ← reset on card change
   }, [])
 
   useEffect(() => {
@@ -325,85 +327,54 @@ export function ProjectsOverlay() {
       <div className="projects-title">Projects</div>
 
       <div className="projects-card-wrapper">
+        <button className="nav-arrow desktop-arrow" onClick={() => goTo(activeIndex - 1)} disabled={activeIndex === 0}>←</button>
 
-        {/* Left arrow */}
-        <button
-          className="nav-arrow desktop-arrow"
-          onClick={() => goTo(activeIndex - 1)}
-          disabled={activeIndex === 0}
-        >
-          ←
-        </button>
-
-        {/* Project card */}
         <div key={animKey} className="project-card">
           <div className="project-image-container">
+
+            {/* Placeholder shown until real image loads */}
+            {!imageLoaded && (
+              <img
+                className="project-img"
+                src={placeholders[activeIndex]}
+                alt="loading..."
+              />
+            )}
+
+            {/* Real image — hidden until loaded, then swaps in */}
             <img
               className="project-img"
-              src={placeholders[activeIndex]}
+              src={project.image}
               alt={project.title}
+              style={{ display: imageLoaded ? "block" : "none" }}
+              onLoad={() => setImageLoaded(true)}
             />
+
           </div>
 
           <div className="project-content">
             <div className="project-title">{project.title}</div>
             <div className="project-description">{project.description}</div>
             <div className="project-links">
-                <a href={project.github} target="_blank" rel="noreferrer" className="project-link github">
-                    GitHub
-                </a>
-                <a href={project.live} target="_blank" rel="noreferrer" className="project-link live">
-                    Live Demo
-                </a>
-                </div>
-            <div className="project-counter">
-              {activeIndex + 1} / {projects.length}
+              <a href={project.github} target="_blank" rel="noreferrer" className="project-link github">GitHub</a>
+              <a href={project.live} target="_blank" rel="noreferrer" className="project-link live">Live Demo</a>
             </div>
+            <div className="project-counter">{activeIndex + 1} / {projects.length}</div>
           </div>
         </div>
 
-        {/* Right arrow */}
-        <button
-          className="nav-arrow desktop-arrow"
-          onClick={() => goTo(activeIndex + 1)}
-          disabled={activeIndex === projects.length - 1}
-        >
-          →
-        </button>
-
+        <button className="nav-arrow desktop-arrow" onClick={() => goTo(activeIndex + 1)} disabled={activeIndex === projects.length - 1}>→</button>
       </div>
 
-      {/* Dots */}
-       <div className="project-bottom">
-      {/* Left arrow — mobile only */}
-      <button
-        className="nav-arrow mobile-arrow"
-        onClick={() => goTo(activeIndex - 1)}
-        disabled={activeIndex === 0}
-      >
-        ←
-      </button>
-
-      <div className="project-dots">
-        {projects.map((_, i) => (
-          <div
-            key={i}
-            className={`project-dot ${i === activeIndex ? "active" : ""}`}
-            onClick={() => goTo(i)}
-          />
-        ))}
+      <div className="project-bottom">
+        <button className="nav-arrow mobile-arrow" onClick={() => goTo(activeIndex - 1)} disabled={activeIndex === 0}>←</button>
+        <div className="project-dots">
+          {projects.map((_, i) => (
+            <div key={i} className={`project-dot ${i === activeIndex ? "active" : ""}`} onClick={() => goTo(i)} />
+          ))}
+        </div>
+        <button className="nav-arrow mobile-arrow" onClick={() => goTo(activeIndex + 1)} disabled={activeIndex === projects.length - 1}>→</button>
       </div>
-
-      {/* Right arrow — mobile only */}
-      <button
-        className="nav-arrow mobile-arrow"
-        onClick={() => goTo(activeIndex + 1)}
-        disabled={activeIndex === projects.length - 1}
-      >
-        →
-      </button>
-    </div>
-
     </div>
   )
 }
