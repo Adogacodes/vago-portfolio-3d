@@ -86,7 +86,7 @@ export const projects = [
   {
     id: 3,
     title: "Reworded",
-    description: "an AI-powered app that rewrites any topic in 8 unique voices, from a 5-year-old to Gordon Ramsay. Built with React and powered by the Groq API.", // TODO: Real description
+    description: "An AI-powered app that rewrites any topic in 8 unique voices, from a 5-year-old to Gordon Ramsay. Built with React and powered by the Groq API.", // TODO: Real description
     github: "https://github.com/vago/project-three", // TODO: Real link
     live: "https://project-three.com", // TODO: Real link
     image: project4 // TODO: Add real screenshot to public folder
