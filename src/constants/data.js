@@ -78,7 +78,7 @@ export const projects = [
   {
     id: 3,
     title: "Shinku",
-    description: "Yet another great project.", // TODO: Real description
+    description: "A feature-complete turn-based strategy game built in React 18, featuring a snake draft system with a 3-strategy CPU AI, dice-based combat mechanics, and a context-driven audio engine — all without a game framework.", // TODO: Real description
     github: "https://github.com/vago/project-three", // TODO: Real link
     live: "https://project-three.com", // TODO: Real link
     image: project3 // TODO: Add real screenshot to public folder
