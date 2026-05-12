@@ -61,15 +61,15 @@ export const skills = skillCategories.flatMap(c => c.skills.map(s => s.name))
 export const projects = [
   {
     id: 1,
-    title: "Project One",
+    title: "Manchong Integrated Farms",
     description: "A cool full stack web application.", // TODO: Real description
     github: "https://github.com/vago/project-one", // TODO: Real link
-    live: "https://project-one.com", // TODO: Real link if deployed
+    live: "https://manchongfarm.com", // TODO: Real link if deployed
     image: project1 // TODO: Add real screenshot to public folder
   },
   {
     id: 2,
-    title: "Project Two",
+    title: "SyncZone",
     description: "Another awesome project.", // TODO: Real description
     github: "https://github.com/vago/project-two", // TODO: Real link
     live: "https://project-two.com", // TODO: Real link
@@ -77,7 +77,7 @@ export const projects = [
   },
   {
     id: 3,
-    title: "Project Three",
+    title: "Shinku",
     description: "Yet another great project.", // TODO: Real description
     github: "https://github.com/vago/project-three", // TODO: Real link
     live: "https://project-three.com", // TODO: Real link
@@ -85,7 +85,7 @@ export const projects = [
   },
   {
     id: 3,
-    title: "Project Four",
+    title: "Reworded",
     description: "Yet another great project.", // TODO: Real description
     github: "https://github.com/vago/project-three", // TODO: Real link
     live: "https://project-three.com", // TODO: Real link
