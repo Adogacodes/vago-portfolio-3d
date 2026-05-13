@@ -70,7 +70,7 @@ export const projects = [
   {
     id: 2,
     title: "SyncZone",
-    description: "Another awesome project.", // TODO: Real description
+    description: "A full-stack remote team dashboard. See who's working, view everyone's timezone on a live grid, and find the best meeting window automatically. Built with React, Node.js, and MongoDB.", // TODO: Real description
     github: "https://github.com/vago/project-two", // TODO: Real link
     live: "https://project-two.com", // TODO: Real link
     image: project2 // TODO: Add real screenshot to public folder
