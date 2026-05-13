@@ -62,7 +62,7 @@ export const projects = [
   {
     id: 1,
     title: "Manchong Integrated Farms",
-    description: "A cool full stack web application.", // TODO: Real description
+    description: "A complete digital platform for a real Nigerian integrated farm — built from the ground up for a paying client. Public website, e-commerce store, subscription delivery system, wholesale B2B portal, and a full admin dashboard. One codebase. One developer.", // TODO: Real description
     github: "https://github.com/vago/project-one", // TODO: Real link
     live: "https://manchongfarm.com", // TODO: Real link if deployed
     image: project1 // TODO: Add real screenshot to public folder
