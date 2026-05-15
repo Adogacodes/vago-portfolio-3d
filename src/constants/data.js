@@ -72,7 +72,7 @@ export const projects = [
     title: "SyncZone",
     description: "A full-stack remote team dashboard. See who's working, view everyone's timezone on a live grid, and find the best meeting window automatically. Built with React, Node.js, and MongoDB.", // TODO: Real description
     github: "https://github.com/Adogacodes/SyncZone", // TODO: Real link
-    live: "https://project-two.com", // TODO: Real link
+    live: "https://sync-zone-three.vercel.app/", // TODO: Real link
     image: project2 // TODO: Add real screenshot to public folder
   },
   {
