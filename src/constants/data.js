@@ -63,15 +63,15 @@ export const projects = [
     id: 1,
     title: "Manchong Integrated Farms",
     description: "A complete digital platform for a real Nigerian integrated farm — built from the ground up for a paying client. Public website, e-commerce store, subscription delivery system, wholesale B2B portal, and a full admin dashboard. One codebase. One developer.", // TODO: Real description
-    github: "https://github.com/vago/project-one", // TODO: Real link
-    live: "https://manchongfarm.com", // TODO: Real link if deployed
+    github: "https://github.com/Adogacodes/MANCHONG-INTEGRATED-FARMS-LIMITED", // TODO: Real link
+    live: "https://manchong.vercel.app", // TODO: Real link if deployed
     image: project1 // TODO: Add real screenshot to public folder
   },
   {
     id: 2,
     title: "SyncZone",
     description: "A full-stack remote team dashboard. See who's working, view everyone's timezone on a live grid, and find the best meeting window automatically. Built with React, Node.js, and MongoDB.", // TODO: Real description
-    github: "https://github.com/vago/project-two", // TODO: Real link
+    github: "https://github.com/Adogacodes/SyncZone", // TODO: Real link
     live: "https://project-two.com", // TODO: Real link
     image: project2 // TODO: Add real screenshot to public folder
   },
@@ -79,16 +79,16 @@ export const projects = [
     id: 3,
     title: "Shinku",
     description: "A feature-complete turn-based strategy game built in React 18, featuring a snake draft system with a 3-strategy CPU AI, dice-based combat mechanics, and a context-driven audio engine — all without a game framework.", // TODO: Real description
-    github: "https://github.com/vago/project-three", // TODO: Real link
-    live: "https://project-three.com", // TODO: Real link
+    github: "https://github.com/Adogacodes/SHINKU", // TODO: Real link
+    live: "https://shinku-ten.vercel.app/", // TODO: Real link
     image: project3 // TODO: Add real screenshot to public folder
   },
   {
     id: 3,
     title: "Reworded",
     description: "An AI-powered app that rewrites any topic in 8 unique voices, from a 5-year-old to Gordon Ramsay. Built with React and powered by the Groq API.", // TODO: Real description
-    github: "https://github.com/vago/project-three", // TODO: Real link
-    live: "https://project-three.com", // TODO: Real link
+    github: "https://github.com/Adogacodes/reworded", // TODO: Real link
+    live: "https://reworded.vercel.app/", // TODO: Real link
     image: project4 // TODO: Add real screenshot to public folder
   },
 ]
