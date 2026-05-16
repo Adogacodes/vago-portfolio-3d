@@ -18,7 +18,7 @@ export default function HUD({ accentColor }) {
         <a href={personalInfo.github} target="_blank" rel="noreferrer" className="hud-link" style={{ color: accentColor }}>
           Github
         </a>
-        <a href={personalInfo.resume} target="_blank" rel="noreferrer" download="Isaac_Adoga_Resume.pdf" className="hud-link" style={{ color: accentColor }}>
+        <a href={personalInfo.resume} target="_blank" rel="noreferrer"  className="hud-link" style={{ color: accentColor }}>
           Resume
         </a>
         <a href={`mailto:${personalInfo.email}`} className="hud-link" style={{ color: accentColor }}>
