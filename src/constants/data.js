@@ -12,9 +12,7 @@ export const personalInfo = {
 }
 
 export const summary = `
-  I am a passionate Full Stack Developer with a love for building
-  clean, efficient, and user-friendly applications. I enjoy solving
-  complex problems and turning ideas into reality through code.
+  I studied Geography. Then I fell down a coding rabbit hole and never came back. I've been building full-stack web applications ever since; real products, real clients, real deployments. I don't have a CS degree. I have four shipped projects and a lot of late nights.
 ` // TODO: Replace with your real professional summary
 
 export const skillCategories = [
