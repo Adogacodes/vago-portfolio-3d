@@ -3,12 +3,13 @@ import project2 from "../assets/project2.png"
 import project3 from "../assets/project3.png"
 import project4 from "../assets/project4.png"
 
+
 export const personalInfo = {
   name: "Isaac Adoga",  // TODO: Replace with your full name
   title: "Full Stack Developer", // TODO: Replace with your title
   email: "vagotech0@gmail.com", // TODO: Replace with your real email
   github: "https://github.com/Adogacodes", // TODO: Replace with your GitHub URL
-  resume: "/resume.pdf", // TODO: Add your real resume PDF to the public folder
+  resume: "/Isaac_Adoga_Resume.pdf", // TODO: Add your real resume PDF to the public folder
 }
 
 export const summary = `
